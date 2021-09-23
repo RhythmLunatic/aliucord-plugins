@@ -12,12 +12,11 @@ import com.aliucord.patcher.PinePatchFn;
 //import com.discord.widgets.chat.list.entries.MessageEntry;
 import com.aliucord.Logger;
 import com.aliucord.Utils;
-import com.aliucord.utils.ReflectUtils;
+//import com.aliucord.utils.ReflectUtils;
 import com.discord.widgets.media.WidgetMedia;
 import android.widget.Toast;
 import android.content.Intent;
 import com.discord.app.AppFragment;
-
 import android.view.View;
 
 // This class is never used so your IDE will likely complain. Let's make it shut up!
