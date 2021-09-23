@@ -1,4 +1,5 @@
-// include(":MyFirstPlugin")
+include(":CopyInsteadOfShareImages")
+project(":CopyInsteadOfShareImages").projectDir = File("./CopyInsteadOfShareImages")
 
 include(":CatApi")
 project(":CatApi").projectDir = File("./ExamplePlugins/CatApi")
@@ -9,7 +10,7 @@ project(":HelloWorld").projectDir = File("./ExamplePlugins/HelloWorld")
 include(":HelloWorldAdvanced")
 project(":HelloWorldAdvanced").projectDir = File("./ExamplePlugins/HelloWorldAdvanced")
 
-include(":MyFirstPatch")
-project(":MyFirstPatch").projectDir = File("./ExamplePlugins/MyFirstPatch")
+//include(":MyFirstPatch")
+//project(":MyFirstPatch").projectDir = File("./ExamplePlugins/MyFirstPatch")
 
 rootProject.name = "AliucordPlugins"
