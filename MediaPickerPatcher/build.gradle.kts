@@ -1,2 +1,2 @@
 version = "1.0.0"
-description = "Patch media picker"
+description = "Replaces the document picker with one that opens the default gallery app."
