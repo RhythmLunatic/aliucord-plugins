@@ -19,7 +19,9 @@ import android.provider.MediaStore;
 import android.content.*;
 //import android.net;
 //import android.content.pm.PackageManager;
-
+import androidx.fragment.app.Fragment;
+import com.lytefast.flexinput.fragment.FlexInputFragment;
+import com.lytefast.flexinput.viewmodel.FlexInputViewModel;
 //import com.discord.widgets.chat.input.*;
 //import com.discord.databinding.WidgetChatInputBinding;
 //import com.lytefast.flexinput.viewmodel.*;
@@ -29,6 +31,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.viewbinding.ViewBinding;
 import android.widget.ImageView;
+import java.lang.reflect.Field;
 
 // This class is never used so your IDE will likely complain. Let's make it shut up!
 @SuppressWarnings("unused")
@@ -44,6 +47,79 @@ public class MediaPickerPatcher extends Plugin {
 	/*public MediaPickerPatcher() {
 		settingsTab = new SettingsTab(MySettingsPage.class).withArgs(settings);
 	}*/
+	
+	private View.OnClickListener getOnClickListenerV14(View view) {
+		View.OnClickListener retrievedListener = null;
+		String viewStr = "android.view.View";
+		String lInfoStr = "android.view.View$ListenerInfo";
+
+		try {
+			Field listenerField = Class.forName(viewStr).getDeclaredField("mListenerInfo");
+			Object listenerInfo = null;
+
+			if (listenerField != null) {
+				listenerField.setAccessible(true);
+				listenerInfo = listenerField.get(view);
+			}
+
+			Field clickListenerField = Class.forName(lInfoStr).getDeclaredField("mOnClickListener");
+
+			if (clickListenerField != null && listenerInfo != null) {
+				retrievedListener = (View.OnClickListener) clickListenerField.get(listenerInfo);
+			}
+		} catch (NoSuchFieldException ex) {
+			//Log.e("Reflection", "No Such Field.");
+		} catch (IllegalAccessException ex) {
+			//Log.e("Reflection", "Illegal Access.");
+		} catch (ClassNotFoundException ex) {
+			//Log.e("Reflection", "Class Not Found.");
+		}
+
+		return retrievedListener;
+	}
+	
+	
+	public class DumbDecompiledCode implements View.OnLongClickListener {
+		public final /* synthetic */ int i;
+		public final /* synthetic */ c.b.a.a.a parentObj;
+
+		public DumbDecompiledCode(int i2, c.b.a.a.a obj) {
+			this.i = i2;
+			parentObj = obj;
+		}
+
+		@Override
+		public boolean onLongClick(View view) {
+			if (i == 0) {
+				//int i3 = c.b.a.a.a.i;
+				if (parentObj.isCancelable()) {
+					parentObj.h(true);
+				}
+			} else if (i == 1) {
+				//Objects.requireNonNull(parentObj);
+				Intent intent = new Intent("android.intent.action.OPEN_DOCUMENT");
+				intent.setType("*/*");
+				intent.addCategory("android.intent.category.OPENABLE");
+				intent.putExtra("android.intent.extra.ALLOW_MULTIPLE", true);
+				try {
+					parentObj.startActivityForResult(intent, 5968);
+				} catch (ActivityNotFoundException unused) {
+					Toast.makeText(parentObj.getContext(), "Some failure message here", 0).show();
+				}
+				return true;
+			} else if (i == 2) {
+				FlexInputFragment flexInputFragment = (FlexInputFragment) ((Fragment) parentObj);
+				FlexInputViewModel flexInputViewModel = flexInputFragment.r;
+				if (flexInputViewModel != null) {
+					flexInputViewModel.onSendButtonClicked(flexInputFragment.n);
+				}
+			} else {
+				throw null;
+			}
+			return false;
+		}
+	}
+
 
 	@Override
 	// Called when your plugin is started. This is the place to register command, add patches, etc
@@ -89,8 +165,19 @@ public class MediaPickerPatcher extends Plugin {
 				var pickerButton = (ImageView)pickerObj.m;
 				
 				//pickerButton.setVisibility(View.GONE);
-				//a aVar2 = (a)pickerObj.j;
-				//Objects.requireNonNull(aVar2);
+				
+				//Does not work because onClick can't be converted to onLongClick..
+				//pickerButton.setOnLongClickListener(getOnClickListenerV14(pickerButton));
+
+				//Surely there is some way to do this with reflection?
+				pickerButton.setOnLongClickListener(new DumbDecompiledCode(1,pickerObj));
+				/*pickerButton.setOnItemLongClickListener( new View.OnLongClickListener() {
+					@Override
+					public void onLongClick(View v) {
+						
+					}
+				});*/
+				
 				pickerButton.setOnClickListener( new View.OnClickListener() {
 					@Override
 					public void onClick (View v) {
