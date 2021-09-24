@@ -1,0 +1,11 @@
+com.discord.media_picker.MediaPicker - Only used for guild and profile pictures
+com/discord/widgets/chat/input/WidgetChatInputAttachments.java - This is supposed to be the file picker but I can't figure out where the file picking part is
+
+"FlexInput.AddContent.Button.Launcher"
+resource: dialog_add_content_pager_with_fab
+
+So it's located in c.b.a.a.a which extends AppCompatDialogFragment
+c.b.a.a.a is spawned by FlexInputFragment.java
+However overriding c.b.a.a.a$View$OnClickListenerC0050a would be pretty stupid so let's get the resource R.e.launch_btn if possible
+
+Just kidding it's too hard, let's just override c.b.a.a.a and hope the class name doesn't ever change
