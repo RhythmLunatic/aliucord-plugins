@@ -32,9 +32,9 @@ import androidx.core.content.ContextCompat;
 import android.graphics.drawable.*;
 
 //For setToTint
-//import com.discord.stores.StoreStream;
-//import com.discord.utilities.color.ColorCompat;
-//import android.graphics.Color;
+import com.discord.stores.StoreStream;
+import com.discord.utilities.color.ColorCompat;
+import android.graphics.Color;
 //import com.aliucord.Logger;
 
 // This class is never used so your IDE will likely complain. Let's make it shut up!
@@ -74,12 +74,10 @@ public class MyFirstPatch extends Plugin {
      * @param drawable Drawable
      * @return Drawable for chaining
      */
-    /*public static Drawable tintToTheme(Drawable drawable) {
-    	int color = ColorCompat.getThemedColor(Utils.getAppContext(), R.b.colorInteractiveNormal);
-    	new Logger("CopyInsteadOfShareImages").debug(Integer.toString(color));
-        if (drawable != null && StoreStream.getUserSettingsSystem().getTheme().equals("light")) drawable.setTint(Color.BLACK);
+    public static Drawable tintToTheme(Context context, Drawable drawable) {
+        if (drawable != null && StoreStream.getUserSettingsSystem().getTheme().equals("light")) drawable.setTint(ColorCompat.getThemedColor(context, R.b.colorInteractiveNormal));
         return drawable;
-    }*/
+    }
 
 	@Override
 	// Called when your plugin is started. This is the place to register command, add patches, etc
@@ -132,7 +130,8 @@ public class MyFirstPatch extends Plugin {
 				
 				
 				//Have to tint it every time in case they change themes
-				((ActionMenuItemView)shareButton).setIcon(Utils.tintToTheme(icon));
+				//((ActionMenuItemView)shareButton).setIcon(Utils.tintToTheme(icon));
+				((ActionMenuItemView)shareButton).setIcon(tintToTheme(shareButton.getContext(),icon));
 				
 			} catch (Exception e) {
   				  e.printStackTrace();
