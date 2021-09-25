@@ -7,6 +7,13 @@ import com.aliucord.annotations.AliucordPlugin;
 import com.aliucord.entities.MessageEmbedBuilder;
 import com.aliucord.entities.Plugin;
 import com.aliucord.patcher.PinePatchFn;
+
+//Needed for settings page
+import com.discord.views.CheckedSetting;
+import com.aliucord.api.SettingsAPI;
+import com.aliucord.widgets.BottomSheet;
+import android.os.Bundle;
+
 //import com.aliucord.wrappers.embeds.MessageEmbedWrapper;
 //import com.discord.widgets.chat.list.entries.ChatListEntry;
 //import com.discord.widgets.chat.list.entries.MessageEntry;
@@ -18,11 +25,42 @@ import android.widget.Toast;
 import android.content.Intent;
 import com.discord.app.AppFragment;
 import android.view.View;
+//import com.discord.R;
+import com.lytefast.flexinput.R;
 
 // This class is never used so your IDE will likely complain. Let's make it shut up!
 @SuppressWarnings("unused")
 @AliucordPlugin
 public class MyFirstPatch extends Plugin {
+
+	public static class PluginSettings extends BottomSheet {
+        private final SettingsAPI settings;
+
+        public PluginSettings(SettingsAPI settings) { this.settings = settings; }
+
+        public void onViewCreated(View view, Bundle bundle) {
+            super.onViewCreated(view, bundle);
+
+            addView(createCheckedSetting(view.getContext(), "Replace media.discordapp.net with cdn.discordapp.com", "replaceMediaWithCDN", true));
+        }
+
+        private CheckedSetting createCheckedSetting(Context ctx, String title, String setting, boolean checked) {
+            CheckedSetting checkedSetting = Utils.createCheckedSetting(ctx, CheckedSetting.ViewType.SWITCH, title, null);
+
+            checkedSetting.setChecked(settings.getBool(setting, checked));
+            checkedSetting.setOnCheckedListener( check -> {
+                settings.setBool(setting, check);
+            });
+
+            return checkedSetting;
+        }
+    }
+    
+    public MyFirstPatch() {
+        settingsTab = new SettingsTab(PluginSettings.class, SettingsTab.Type.BOTTOM_SHEET).withArgs(settings);
+    }
+
+
 	@Override
 	// Called when your plugin is started. This is the place to register command, add patches, etc
 	public void start(Context context) {
@@ -44,7 +82,7 @@ public class MyFirstPatch extends Plugin {
 			var root = binding.getRoot();
 			var shareButton = root.findViewById(shareButtonId);
 			try {
-				
+				//shareButton.setIcon(R.d.ic_copy_24dp);
 				//Old (Doesn't work for embeds and stuff)
 				//var imageUri = ReflectUtils.getField(callFrame.thisObject,"imageUri").toString();
 				
@@ -54,15 +92,22 @@ public class MyFirstPatch extends Plugin {
 				//var imageUri = a.getStringExtra("INTENT_MEDIA_URL");
 				
 				//v3
-				var imageUri = ((AppFragment)callFrame.thisObject).getMostRecentIntent().getStringExtra("INTENT_MEDIA_URL");
+				String imageUri = ((AppFragment)callFrame.thisObject).getMostRecentIntent().getStringExtra("INTENT_MEDIA_URL");
+				if (settings.getBool("replaceMediaWithCDN", true))
+					imageUri = imageUri.replace("media.discordapp.net","cdn.discordapp.com");
+				
+				//Because I can't make a string final after it's already been created...
+				final String imageUriFinal = new String(imageUri);
+				
 				
 				shareButton.setOnClickListener( new View.OnClickListener() {
 					@Override
 					public void onClick (View v) {
-						Utils.setClipboard(null,imageUri);
-						Toast.makeText(context, "Copied "+imageUri, Toast.LENGTH_SHORT).show();
+						Utils.setClipboard(null,imageUriFinal);
+						Toast.makeText(context, "Copied "+imageUriFinal, Toast.LENGTH_SHORT).show();
 					}
 				});
+				
 			} catch (Exception e) {
   				  e.printStackTrace();
 				Toast.makeText(context, "Oops, can't get image URL", Toast.LENGTH_SHORT).show();

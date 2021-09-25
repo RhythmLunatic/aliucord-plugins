@@ -9,23 +9,9 @@ import com.aliucord.entities.Plugin;
 import com.aliucord.patcher.PinePatchFn;
 import com.aliucord.Logger;
 import com.aliucord.Utils;
-//import com.aliucord.utils.ReflectUtils;
-//import com.discord.media_picker.MediaPicker;
-//import com.discord.media_picker.RequestType;
-//import top.canyie.pine.callback.MethodReplacement;
-//import androidx.core.content.FileProvider;
 import android.widget.Toast;
 import android.provider.MediaStore;
 import android.content.*;
-//import android.net;
-//import android.content.pm.PackageManager;
-//import androidx.fragment.app.Fragment;
-//import com.lytefast.flexinput.fragment.FlexInputFragment;
-//import com.lytefast.flexinput.viewmodel.FlexInputViewModel;
-//import com.discord.widgets.chat.input.*;
-//import com.discord.databinding.WidgetChatInputBinding;
-//import com.lytefast.flexinput.viewmodel.*;
-//import com.lytefast.flexinput.fragment.*;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,20 +19,43 @@ import androidx.viewbinding.ViewBinding;
 import android.widget.ImageView;
 import java.lang.reflect.Field;
 
+//Needed for settings page
+import com.discord.views.CheckedSetting;
+import com.aliucord.api.SettingsAPI;
+import com.aliucord.widgets.BottomSheet;
+import android.os.Bundle;
+
 // This class is never used so your IDE will likely complain. Let's make it shut up!
 @SuppressWarnings("unused")
 @AliucordPlugin
 public class MediaPickerPatcher extends Plugin {
 
-	/*class PluginSettings {
-		@override
-		onViewBound(View view) {
-			var context = requireContext()
-		}
-	}*/
-	/*public MediaPickerPatcher() {
-		settingsTab = new SettingsTab(MySettingsPage.class).withArgs(settings);
-	}*/
+	public static class PluginSettings extends BottomSheet {
+        private final SettingsAPI settings;
+
+        public PluginSettings(SettingsAPI settings) { this.settings = settings; }
+
+        public void onViewCreated(View view, Bundle bundle) {
+            super.onViewCreated(view, bundle);
+
+            addView(createCheckedSetting(view.getContext(), "Allow all file types", "MMP_AllowAllFiles", true));
+        }
+
+        private CheckedSetting createCheckedSetting(Context ctx, String title, String setting, boolean checked) {
+            CheckedSetting checkedSetting = Utils.createCheckedSetting(ctx, CheckedSetting.ViewType.SWITCH, title, null);
+
+            checkedSetting.setChecked(settings.getBool(setting, checked));
+            checkedSetting.setOnCheckedListener( check -> {
+                settings.setBool(setting, check);
+            });
+
+            return checkedSetting;
+        }
+    }
+    
+    public MediaPickerPatcher() {
+        settingsTab = new SettingsTab(PluginSettings.class, SettingsTab.Type.BOTTOM_SHEET).withArgs(settings);
+    }
 
 	@Override
 	// Called when your plugin is started. This is the place to register command, add patches, etc
@@ -71,7 +80,7 @@ public class MediaPickerPatcher extends Plugin {
 					@Override
 					public void onClick (View v) {
 						Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-						if (false)
+						if (settings.getBool("MMP_AllowAllFiles", true))
 							intent.setType("*/*");
 						else
 						{
