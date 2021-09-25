@@ -1,2 +1,2 @@
-version = "1.0.0"
+version = "1.0.1"
 description = "Replaces the document picker with one that opens the default gallery app. Can also long press the open file button for the original document picker."

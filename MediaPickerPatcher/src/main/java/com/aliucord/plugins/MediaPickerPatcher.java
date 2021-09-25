@@ -48,36 +48,6 @@ public class MediaPickerPatcher extends Plugin {
 		settingsTab = new SettingsTab(MySettingsPage.class).withArgs(settings);
 	}*/
 	
-	private View.OnClickListener getOnClickListenerV14(View view) {
-		View.OnClickListener retrievedListener = null;
-		String viewStr = "android.view.View";
-		String lInfoStr = "android.view.View$ListenerInfo";
-
-		try {
-			Field listenerField = Class.forName(viewStr).getDeclaredField("mListenerInfo");
-			Object listenerInfo = null;
-
-			if (listenerField != null) {
-				listenerField.setAccessible(true);
-				listenerInfo = listenerField.get(view);
-			}
-
-			Field clickListenerField = Class.forName(lInfoStr).getDeclaredField("mOnClickListener");
-
-			if (clickListenerField != null && listenerInfo != null) {
-				retrievedListener = (View.OnClickListener) clickListenerField.get(listenerInfo);
-			}
-		} catch (NoSuchFieldException ex) {
-			//Log.e("Reflection", "No Such Field.");
-		} catch (IllegalAccessException ex) {
-			//Log.e("Reflection", "Illegal Access.");
-		} catch (ClassNotFoundException ex) {
-			//Log.e("Reflection", "Class Not Found.");
-		}
-
-		return retrievedListener;
-	}
-	
 	
 	public class DumbDecompiledCode implements View.OnLongClickListener {
 		public final /* synthetic */ int i;
@@ -125,38 +95,7 @@ public class MediaPickerPatcher extends Plugin {
 	// Called when your plugin is started. This is the place to register command, add patches, etc
 	public void start(Context context) {
 		Logger logger = new Logger("MediaPickerPatcher");
-		/*try {
-			patcher.patch(MediaPicker.class.getDeclaredMethod("a",MediaPicker.Provider.class),MethodReplacement.DO_NOTHING);
-			patcher.patch(MediaPicker.class.getDeclaredMethod("b",Context.class),MethodReplacement.DO_NOTHING);
-			patcher.patch(WidgetChatInputAttachments.class.getDeclaredMethod("addExternalAttachment",com.lytefast.flexinput.model.Attachment.class),MethodReplacement.DO_NOTHING);
-			//patcher.patch(MediaPicker.class.getDeclaredMethod("c",long.class),MethodReplacement.DO_NOTHING);
-			//patcher.patch(MediaPicker.class.getDeclaredMethod("d",Context.class, RequestType.class, Intent.class),MethodReplacement.DO_NOTHING);
-			
-			//patcher.patch(b.class.getDeclaredMethod("b",PackageManager.class, CharSequence.class, android.net.Uri.class, String.class),MethodReplacement.DO_NOTHING);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}*/
-		
-		/*patcher.patch(FlexInputFragment.class, "onViewCreated", new Class<?>[]{View.class,android.os.Bundle.class}, new PinePatchFn(callFrame -> {
-			
 
-			try {
-				var flexInputFragment = (FlexInputFragment)callFrame.thisObject;
-				var binding = (ViewBinding)flexInputFragment.j();
-				var root = binding.getRoot();
-				var pickerButton = root.findViewById(Utils.getResId("launch_btn","id"));
-				
-				pickerButton.setVisibility(View.GONE);
-				logger.debug("Patched button?");
-				
-			} catch (Exception e) {
-					e.printStackTrace();
-					//Toast.makeText(context, "Oops, can't get image URL", Toast.LENGTH_SHORT).show();
-			}
-			
-			
-			
-		}));*/
 		patcher.patch(c.b.a.a.a.class, "onCreateView", new Class<?>[]{LayoutInflater.class,ViewGroup.class,android.os.Bundle.class}, new PinePatchFn(callFrame -> {
 			
 
@@ -166,8 +105,6 @@ public class MediaPickerPatcher extends Plugin {
 				
 				//pickerButton.setVisibility(View.GONE);
 				
-				//Does not work because onClick can't be converted to onLongClick..
-				//pickerButton.setOnLongClickListener(getOnClickListenerV14(pickerButton));
 
 				//Surely there is some way to do this with reflection?
 				pickerButton.setOnLongClickListener(new DumbDecompiledCode(1,pickerObj));
@@ -198,11 +135,11 @@ public class MediaPickerPatcher extends Plugin {
 						}
 					}
 				});
-				logger.debug("Patched button?");
+				logger.debug("Patched media picker button.");
 				
 			} catch (Exception e) {
-					e.printStackTrace();
-					//Toast.makeText(context, "Oops, can't get image URL", Toast.LENGTH_SHORT).show();
+				e.printStackTrace();
+				//Toast.makeText(context, "Oops, can't get image URL", Toast.LENGTH_SHORT).show();
 			}
 			
 			
