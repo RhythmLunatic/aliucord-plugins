@@ -19,9 +19,9 @@ import android.provider.MediaStore;
 import android.content.*;
 //import android.net;
 //import android.content.pm.PackageManager;
-import androidx.fragment.app.Fragment;
-import com.lytefast.flexinput.fragment.FlexInputFragment;
-import com.lytefast.flexinput.viewmodel.FlexInputViewModel;
+//import androidx.fragment.app.Fragment;
+//import com.lytefast.flexinput.fragment.FlexInputFragment;
+//import com.lytefast.flexinput.viewmodel.FlexInputViewModel;
 //import com.discord.widgets.chat.input.*;
 //import com.discord.databinding.WidgetChatInputBinding;
 //import com.lytefast.flexinput.viewmodel.*;
@@ -47,49 +47,6 @@ public class MediaPickerPatcher extends Plugin {
 	/*public MediaPickerPatcher() {
 		settingsTab = new SettingsTab(MySettingsPage.class).withArgs(settings);
 	}*/
-	
-	
-	public class DumbDecompiledCode implements View.OnLongClickListener {
-		public final /* synthetic */ int i;
-		public final /* synthetic */ c.b.a.a.a parentObj;
-
-		public DumbDecompiledCode(int i2, c.b.a.a.a obj) {
-			this.i = i2;
-			parentObj = obj;
-		}
-
-		@Override
-		public boolean onLongClick(View view) {
-			if (i == 0) {
-				//int i3 = c.b.a.a.a.i;
-				if (parentObj.isCancelable()) {
-					parentObj.h(true);
-				}
-			} else if (i == 1) {
-				//Objects.requireNonNull(parentObj);
-				Intent intent = new Intent("android.intent.action.OPEN_DOCUMENT");
-				intent.setType("*/*");
-				intent.addCategory("android.intent.category.OPENABLE");
-				intent.putExtra("android.intent.extra.ALLOW_MULTIPLE", true);
-				try {
-					parentObj.startActivityForResult(intent, 5968);
-				} catch (ActivityNotFoundException unused) {
-					Toast.makeText(parentObj.getContext(), "Some failure message here", 0).show();
-				}
-				return true;
-			} else if (i == 2) {
-				FlexInputFragment flexInputFragment = (FlexInputFragment) ((Fragment) parentObj);
-				FlexInputViewModel flexInputViewModel = flexInputFragment.r;
-				if (flexInputViewModel != null) {
-					flexInputViewModel.onSendButtonClicked(flexInputFragment.n);
-				}
-			} else {
-				throw null;
-			}
-			return false;
-		}
-	}
-
 
 	@Override
 	// Called when your plugin is started. This is the place to register command, add patches, etc
@@ -105,15 +62,10 @@ public class MediaPickerPatcher extends Plugin {
 				
 				//pickerButton.setVisibility(View.GONE);
 				
-
-				//Surely there is some way to do this with reflection?
-				pickerButton.setOnLongClickListener(new DumbDecompiledCode(1,pickerObj));
-				/*pickerButton.setOnItemLongClickListener( new View.OnLongClickListener() {
-					@Override
-					public void onLongClick(View v) {
-						
-					}
-				});*/
+				pickerButton.setOnLongClickListener(view -> {
+					new c.b.a.a.a$a(1,pickerObj).onClick(view);
+					return true;
+				});
 				
 				pickerButton.setOnClickListener( new View.OnClickListener() {
 					@Override
