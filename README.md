@@ -11,3 +11,6 @@ Replaces the document picker with one that opens the default gallery app. Can al
 Also allows picking videos from the gallery if your default app parses intents properly.
 
 (This is actually a bit of a misnomer, Discord has a class named MediaPicker that is used for guilds and profile pictures but it doesn't patch that)
+
+# Special Thanks
+zt, Ven Halen, Not Wing, and everyone else who answered my questions when I know virtually nothing about Java/Android

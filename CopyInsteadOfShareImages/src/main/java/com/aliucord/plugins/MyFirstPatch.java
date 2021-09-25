@@ -25,8 +25,17 @@ import android.widget.Toast;
 import android.content.Intent;
 import com.discord.app.AppFragment;
 import android.view.View;
+import androidx.appcompat.view.menu.ActionMenuItemView;
 //import com.discord.R;
 import com.lytefast.flexinput.R;
+import androidx.core.content.ContextCompat;
+import android.graphics.drawable.*;
+
+//For setToTint
+//import com.discord.stores.StoreStream;
+//import com.discord.utilities.color.ColorCompat;
+//import android.graphics.Color;
+//import com.aliucord.Logger;
 
 // This class is never used so your IDE will likely complain. Let's make it shut up!
 @SuppressWarnings("unused")
@@ -60,6 +69,17 @@ public class MyFirstPatch extends Plugin {
         settingsTab = new SettingsTab(PluginSettings.class, SettingsTab.Type.BOTTOM_SHEET).withArgs(settings);
     }
 
+    /**
+     * Tints a {@link Drawable} to {@link Color#BLACK} if a user has set light theme.
+     * @param drawable Drawable
+     * @return Drawable for chaining
+     */
+    /*public static Drawable tintToTheme(Drawable drawable) {
+    	int color = ColorCompat.getThemedColor(Utils.getAppContext(), R.b.colorInteractiveNormal);
+    	new Logger("CopyInsteadOfShareImages").debug(Integer.toString(color));
+        if (drawable != null && StoreStream.getUserSettingsSystem().getTheme().equals("light")) drawable.setTint(Color.BLACK);
+        return drawable;
+    }*/
 
 	@Override
 	// Called when your plugin is started. This is the place to register command, add patches, etc
@@ -74,6 +94,9 @@ public class MyFirstPatch extends Plugin {
 		// look like this:
 		var methodArguments = new Class<?>[] { };
 		
+		//Grab icon
+		Drawable icon = ContextCompat.getDrawable(context,R.d.ic_link_white_24dp).mutate();
+		
 		final int shareButtonId = Utils.getResId("menu_media_share","id");
 
 		// add the patch
@@ -82,7 +105,6 @@ public class MyFirstPatch extends Plugin {
 			var root = binding.getRoot();
 			var shareButton = root.findViewById(shareButtonId);
 			try {
-				//shareButton.setIcon(R.d.ic_copy_24dp);
 				//Old (Doesn't work for embeds and stuff)
 				//var imageUri = ReflectUtils.getField(callFrame.thisObject,"imageUri").toString();
 				
@@ -107,6 +129,10 @@ public class MyFirstPatch extends Plugin {
 						Toast.makeText(context, "Copied "+imageUriFinal, Toast.LENGTH_SHORT).show();
 					}
 				});
+				
+				
+				//Have to tint it every time in case they change themes
+				((ActionMenuItemView)shareButton).setIcon(Utils.tintToTheme(icon));
 				
 			} catch (Exception e) {
   				  e.printStackTrace();
