@@ -26,6 +26,10 @@ import android.content.Intent;
 import com.discord.app.AppFragment;
 import android.view.View;
 import androidx.appcompat.view.menu.ActionMenuItemView;
+import androidx.appcompat.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
+//import androidx.appcompat.view.menu.MenuBuilder;
 //import com.discord.R;
 import com.lytefast.flexinput.R;
 import androidx.core.content.ContextCompat;
@@ -102,16 +106,12 @@ public class MyFirstPatch extends Plugin {
 			var binding = WidgetMedia.access$getBinding$p((WidgetMedia) callFrame.thisObject);
 			var root = binding.getRoot();
 			var shareButton = root.findViewById(shareButtonId);
+			
 			try {
 				//Old (Doesn't work for embeds and stuff)
 				//var imageUri = ReflectUtils.getField(callFrame.thisObject,"imageUri").toString();
 				
-				
-				//v2
-				//var a = (Intent)ReflectUtils.invokeMethod(AppFragment.class,callFrame.thisObject,"getMostRecentIntent");
-				//var imageUri = a.getStringExtra("INTENT_MEDIA_URL");
-				
-				//v3
+				//Better one
 				String imageUri = ((AppFragment)callFrame.thisObject).getMostRecentIntent().getStringExtra("INTENT_MEDIA_URL");
 				if (settings.getBool("replaceMediaWithCDN", true))
 					imageUri = imageUri.replace("media.discordapp.net","cdn.discordapp.com");
@@ -120,22 +120,43 @@ public class MyFirstPatch extends Plugin {
 				final String imageUriFinal = new String(imageUri);
 				
 				
-				shareButton.setOnClickListener( new View.OnClickListener() {
-					@Override
-					public void onClick (View v) {
+				if (shareButton != null)
+				{
+				
+					shareButton.setOnClickListener( new View.OnClickListener() {
+						@Override
+						public void onClick (View v) {
+							Utils.setClipboard(null,imageUriFinal);
+							Toast.makeText(context, "Copied "+imageUriFinal, Toast.LENGTH_SHORT).show();
+						}
+					});
+					
+					
+					//Have to tint it every time in case they change themes
+					//((ActionMenuItemView)shareButton).setIcon(Utils.tintToTheme(icon));
+					((ActionMenuItemView)shareButton).setIcon(tintToTheme(shareButton.getContext(),icon));
+				}
+				else
+				{
+					//Most likely there is no share button because the screen width is too small.
+					//Instead append a new command to the three dot menu.
+					//TODO...
+					Toolbar toolbar = root.findViewById(Utils.getResId("action_bar_toolbar","id"));
+					//toolbar.showOverflowMenu();
+					
+					//Abandon all hope, ye who enter here!
+					Menu menu = toolbar.getMenu();
+					MenuItem newItem = menu.add("Copy URL");
+					newItem.setOnMenuItemClickListener(item -> {
 						Utils.setClipboard(null,imageUriFinal);
 						Toast.makeText(context, "Copied "+imageUriFinal, Toast.LENGTH_SHORT).show();
-					}
-				});
-				
-				
-				//Have to tint it every time in case they change themes
-				//((ActionMenuItemView)shareButton).setIcon(Utils.tintToTheme(icon));
-				((ActionMenuItemView)shareButton).setIcon(tintToTheme(shareButton.getContext(),icon));
+						return true;
+					});
+				}
 				
 			} catch (Exception e) {
   				  e.printStackTrace();
-				Toast.makeText(context, "Oops, can't get image URL", Toast.LENGTH_SHORT).show();
+				Toast.makeText(context, "Oops, can't get image URL (Or something went wrong)", Toast.LENGTH_SHORT).show();
 			}
 			
 			//shareButton.setVisibility(View.GONE);
