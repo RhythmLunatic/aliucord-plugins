@@ -7,12 +7,16 @@ import com.aliucord.annotations.AliucordPlugin;
 //import com.aliucord.entities.MessageEmbedBuilder;
 import com.aliucord.entities.Plugin;
 import com.aliucord.patcher.PinePatchFn;
+import com.aliucord.patcher.PineInsteadFn;
 import com.aliucord.Logger;
 import com.aliucord.Utils;
 import android.widget.Toast;
 import android.provider.MediaStore;
 import android.content.*;
 import android.view.LayoutInflater;
+import com.discord.widgets.chat.input.*;
+import java.util.List;
+
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.viewbinding.ViewBinding;
@@ -24,6 +28,12 @@ import com.discord.views.CheckedSetting;
 import com.aliucord.api.SettingsAPI;
 import com.aliucord.widgets.BottomSheet;
 import android.os.Bundle;
+
+//
+import java.util.ArrayList;
+import com.lytefast.flexinput.fragment.*;
+import com.lytefast.flexinput.model.*;
+import androidx.fragment.app.DialogFragment;
 
 // This class is never used so your IDE will likely complain. Let's make it shut up!
 @SuppressWarnings("unused")
@@ -39,6 +49,7 @@ public class MediaPickerPatcher extends Plugin {
             super.onViewCreated(view, bundle);
 
             addView(createCheckedSetting(view.getContext(), "Allow all file types", "MMP_AllowAllFiles", true));
+            addView(createCheckedSetting(view.getContext(), "Fix keyboard popup bug in Discord after picking a file (I haven't fully tested it so please report issues if you encounter any)", "MMP_PatchThePickerResult", true));
         }
 
         private CheckedSetting createCheckedSetting(Context ctx, String title, String setting, boolean checked) {
@@ -106,6 +117,24 @@ public class MediaPickerPatcher extends Plugin {
 			
 			
 		}));
+
+		if (settings.getBool("MMP_PatchThePickerResult", true))
+		{
+			patcher.patch(FlexInputFragment$b.class,"run",new Class<?>[]{}, new PineInsteadFn(callFrame->{
+				//logger.debug("b.run() fired");
+				//logger.debug("State: "+String.valueOf(fragment.getShowsDialog()));
+				c.b.a.a.a fragment = (c.b.a.a.a)((FlexInputFragment$b)callFrame.thisObject).i;
+				
+				if (fragment != null && fragment.isAdded() && !fragment.isRemoving() && !fragment.isDetached()) {
+					try {
+						fragment.h(true);
+					} catch (IllegalStateException e) {
+						logger.warn("could not dismiss add content dialog");
+					}
+				}
+				return null;
+			}));
+		}
 	}
 
 	@Override
