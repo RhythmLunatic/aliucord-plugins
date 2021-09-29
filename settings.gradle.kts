@@ -4,4 +4,7 @@ project(":CopyInsteadOfShareImages").projectDir = File("./CopyInsteadOfShareImag
 include(":MediaPickerPatcher")
 project(":MediaPickerPatcher").projectDir = File("./MediaPickerPatcher")
 
+include(":AttachmentKeyboardFix")
+project(":AttachmentKeyboardFix").projectDir = File("./AttachmentKeyboardFix")
+
 rootProject.name = "AliucordPlugins"
