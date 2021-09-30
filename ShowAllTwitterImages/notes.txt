@@ -1,0 +1,20 @@
+com.discord.media_picker.MediaPicker - Only used for guild and profile pictures
+com/discord/widgets/chat/input/WidgetChatInputAttachments.java - This is supposed to be the file picker but I can't figure out where the file picking part is
+
+"FlexInput.AddContent.Button.Launcher"
+resource: dialog_add_content_pager_with_fab
+
+So it's located in c.b.a.a.a which extends AppCompatDialogFragment
+c.b.a.a.a is spawned by FlexInputFragment.java
+However overriding c.b.a.a.a$View$OnClickListenerC0050a would be pretty stupid so let's get the resource R.e.launch_btn if possible
+
+Just kidding it's too hard, let's just override c.b.a.a.a and hope the class name doesn't ever change
+
+About the media picker popping back up when you type on the keyboard... This is a bug from Discord, it happens even if you don't patch it.
+~~I think they removed the keyboard button and forgot about this, because it's caused by the app calling a function to set the page only after you pick an attachment from the 'open' button, which changes it to the first page and brings it back up.~~
+~~I observed this by hooking AppFlexInputViewModel.onContentDialogPageChanged(0), but this is just the function that reacts to the page being changed and does nothing on its own.~~
+
+The ACTUAL reason: In FlexInputFragment there is a lambda FlexInputFragment$b that handles dismissing the media picker. It's called from obfuscated function f().
+FlexInputFragment$b has a function run() that casts the media picker object to a base class DialogFragment. The problem? This is not the correct function!
+c.b.a.a.a (Or AddContentDialogFragment before it was obfuscated) is derived from AppCompatDialogFragment which is derived from DialogFragment. The function name is lost, but it was probably dismiss() before it got turned into h().
+Anyways, they SHOULD have cast it to AddContentDialogFragment and called AddContentDialogFragment.h(), this properly dismisses the media picker and doesn't leave it in a broken state.
