@@ -27,3 +27,6 @@ Fixes a Discord bug where picking an attachment and typing something brings the 
 
 # Special Thanks
 zt, Ven Halen, Not Wing, and everyone else who answered my questions when I know virtually nothing about Java/Android
+
+# License
+GPLv3, if you would like an exception contact me.
