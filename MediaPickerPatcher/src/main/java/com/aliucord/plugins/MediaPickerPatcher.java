@@ -48,14 +48,16 @@ public class MediaPickerPatcher extends Plugin {
         public void onViewCreated(View view, Bundle bundle) {
             super.onViewCreated(view, bundle);
 
-            addView(createCheckedSetting(view.getContext(), "Allow all file types", "MMP_AllowAllFiles", true));
-            addView(createCheckedSetting(view.getContext(), "Fix keyboard popup bug in Discord after picking a file (I haven't fully tested it so please report issues if you encounter any)", "MMP_PatchThePickerResult", true));
+			//
+            addView(createCheckedSetting(view.getContext(), "Allow all file types", "MMP_AllowAllFiles", false));
         }
 
-        private CheckedSetting createCheckedSetting(Context ctx, String title, String setting, boolean checked) {
+        private CheckedSetting createCheckedSetting(Context ctx, String title, String setting, boolean checkedByDefault) {
+        
+        	//fun createCheckedSetting(context: Context, type: CheckedSetting.ViewType, text: CharSequence?, subtext: CharSequence?)
             CheckedSetting checkedSetting = Utils.createCheckedSetting(ctx, CheckedSetting.ViewType.SWITCH, title, null);
 
-            checkedSetting.setChecked(settings.getBool(setting, checked));
+            checkedSetting.setChecked(settings.getBool(setting, checkedByDefault));
             checkedSetting.setOnCheckedListener( check -> {
                 settings.setBool(setting, check);
             });
@@ -118,23 +120,23 @@ public class MediaPickerPatcher extends Plugin {
 			
 		}));
 
-		if (settings.getBool("MMP_PatchThePickerResult", true))
-		{
-			patcher.patch(FlexInputFragment$b.class,"run",new Class<?>[]{}, new PineInsteadFn(callFrame->{
-				//logger.debug("b.run() fired");
-				//logger.debug("State: "+String.valueOf(fragment.getShowsDialog()));
-				c.b.a.a.a fragment = (c.b.a.a.a)((FlexInputFragment$b)callFrame.thisObject).i;
-				
-				if (fragment != null && fragment.isAdded() && !fragment.isRemoving() && !fragment.isDetached()) {
-					try {
-						fragment.h(true);
-					} catch (IllegalStateException e) {
-						logger.warn("could not dismiss add content dialog");
-					}
+
+		patcher.patch(FlexInputFragment$b.class,"run",new Class<?>[]{}, new PineInsteadFn(callFrame->{
+			//logger.debug("b.run() fired");
+			//logger.debug("State: "+String.valueOf(fragment.getShowsDialog()));
+			
+			//See "notes.txt" for more information.
+			c.b.a.a.a fragment = (c.b.a.a.a)((FlexInputFragment$b)callFrame.thisObject).i;
+			
+			if (fragment != null && fragment.isAdded() && !fragment.isRemoving() && !fragment.isDetached()) {
+				try {
+					fragment.h(true);
+				} catch (IllegalStateException e) {
+					logger.warn("could not dismiss add content dialog");
 				}
-				return null;
-			}));
-		}
+			}
+			return null;
+		}));
 	}
 
 	@Override
@@ -144,3 +146,20 @@ public class MediaPickerPatcher extends Plugin {
 		patcher.unpatchAll();
 	}
 }
+
+/*
+Copyright (C) Rhythm Lunatic 2021
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/

@@ -10,4 +10,8 @@ project(":AttachmentKeyboardFix").projectDir = File("./AttachmentKeyboardFix")
 include(":ShowAllTwitterImages")
 project(":ShowAllTwitterImages").projectDir = File("./ShowAllTwitterImages")
 
+
+include(":FakeStickers")
+project(":FakeStickers").projectDir = File("./FakeStickers")
+
 rootProject.name = "AliucordPlugins"

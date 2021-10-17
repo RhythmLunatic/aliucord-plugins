@@ -1,0 +1,70 @@
+The base class that holds all three of these is WidgetExpressionTray.java
+
+Functions are passed in from the base class to all three pickers... Probably because the channel ID needs to be passed in.
+
+StickerViewHolder
+
+public final void configureSticker(MGRecyclerDataPayload mGRecyclerDataPayload) {
+    Sticker sticker;
+    StickerItem stickerItem = (StickerItem) (!(mGRecyclerDataPayload instanceof StickerItem) ? null : mGRecyclerDataPayload);
+    if (stickerItem != null && (sticker = stickerItem.getSticker()) != null) {
+        this.binding.b.d(sticker, 0);
+        StickerView stickerView = this.binding.b;
+        m.checkNotNullExpressionValue(stickerView, "binding.stickerPickerSticker");
+        stickerView.setAlpha(((StickerItem) mGRecyclerDataPayload).getSendability() == StickerUtils.StickerSendability.SENDABLE ? 1.0f : 0.25f); //Patch this for visible stickers
+        this.binding.b.setOnClickListener(new StickerViewHolder$configureSticker$1(this, mGRecyclerDataPayload));
+    }
+}
+
+Decompilation failed for StickerViewHolder$configureSticker$1.onClick
+
+/*
+    r1 = this;
+    com.discord.widgets.chat.input.sticker.StickerViewHolder r2 = r1.this$0
+    com.discord.widgets.chat.input.sticker.WidgetStickerAdapter r2 = com.discord.widgets.chat.input.sticker.StickerViewHolder.access$getAdapter$p(r2)
+    kotlin.jvm.functions.Function1 r2 = r2.getOnStickerItemSelected()
+    com.discord.utilities.mg_recycler.MGRecyclerDataPayload r0 = r1.$data
+    r2.invoke(r0)
+    com.discord.widgets.chat.input.sticker.StickerViewHolder r2 = r1.this$0     // Catch:{ all -> 0x001b }
+    com.discord.databinding.StickerPickerStickerItemBinding r2 = com.discord.widgets.chat.input.sticker.StickerViewHolder.access$getBinding$p(r2)     // Catch:{ all -> 0x001b }
+    com.discord.views.sticker.StickerView r2 = r2.b     // Catch:{ all -> 0x001b }
+    r0 = 3
+    r2.performHapticFeedback(r0)     // Catch:{ all -> 0x001b }
+L_0x001b:
+    return
+*/
+
+
+//Some way of sending text. 
+@Override // com.discord.widgets.chat.input.emoji.EmojiPickerListener
+public void onEmojiPicked(Emoji emoji) {
+    m.checkNotNullParameter(emoji, "emoji");
+    FlexInputFragment flexInputFragment = this.this$0.flexInputFragment;
+    String chatInputText = emoji.getChatInputText();
+    m.checkNotNullExpressionValue(chatInputText, "emoji.chatInputText");
+    Objects.requireNonNull(flexInputFragment);
+    m.checkNotNullParameter(chatInputText, "emojiText");
+    FlexInputViewModel flexInputViewModel = flexInputFragment.r;
+    if (flexInputViewModel != null) {
+        flexInputViewModel.onInputTextAppended(chatInputText + ' ');
+    }
+}
+
+/* compiled from: WidgetChatInputAttachments.kt */
+public final class WidgetChatInputAttachments$createAndConfigureExpressionFragment$stickerPickerListener$1 implements StickerPickerListener {
+    public final /* synthetic */ WidgetChatInputAttachments this$0;
+
+    public WidgetChatInputAttachments$createAndConfigureExpressionFragment$stickerPickerListener$1(WidgetChatInputAttachments widgetChatInputAttachments) {
+        this.this$0 = widgetChatInputAttachments;
+    }
+
+    @Override // com.discord.widgets.chat.input.sticker.StickerPickerListener
+    public void onStickerPicked(Sticker sticker) {
+        m.checkNotNullParameter(sticker, "sticker");
+        FlexInputViewModel flexInputViewModel = this.this$0.flexInputFragment.r;
+        if (flexInputViewModel != null) {
+            flexInputViewModel.hideExpressionTray();
+        }
+    }
+}
+

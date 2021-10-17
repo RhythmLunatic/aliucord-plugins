@@ -30,3 +30,12 @@ zt, Ven Halen, Not Wing, and everyone else who answered my questions when I know
 
 # License
 GPLv3, if you would like an exception contact me.
+
+# Support
+Please file an issue on the github repo if something is not working correctly.
+
+# Donate
+
+Like the plugins? Support me by donating.
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/D1D7Y21A)

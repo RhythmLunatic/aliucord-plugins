@@ -1,0 +1,18 @@
+As you can see, this plugin patches ChatListEntry.createEmbedEntries();
+createEmbedEntries handles what embeds to display below a message, it's the function that sets up an array ChatListEntry which then gets rendered.
+If you patch this function you can even make your own custom embeds and put them below the message.
+
+createEmbedEntries is obfsucated, but if you dig deep enough you can find the deobfuscated parameters:
+
+public final List<ChatListEntry> createEmbedEntries(
+	Message message,
+	StoreMessageState.State state,
+	boolean isBlockedExpanded,
+	boolean allowAnimatedEmojis,
+	boolean autoPlayGifs,
+	boolean z5, //The name of this one is a mystery, but if it's true an empty ChatListEntry is returned.
+	long guildID,
+	boolean isThreadStarter
+);
+
+Since twitter embeds are just a regular embed it's likely there's a flag that controls whether or not they should be generated, but the decompilation failed at some parts so it's a mystery.
