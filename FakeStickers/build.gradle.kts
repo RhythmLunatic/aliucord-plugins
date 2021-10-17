@@ -1,2 +1,2 @@
-version = "0.0.6"
-description = "Post stickers as images, use stickers without nitro. (Overwrites normal sticker posting functionality!)"
+version = "1.0.0"
+description = "Posts a sticker as an image if the sticker is unavailable normally (Usually when you don't have Nitro). Lottie stickers are unsupported."
