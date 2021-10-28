@@ -2,22 +2,18 @@ package com.aliucord.plugins;
 
 import android.content.Context;
 
-import com.aliucord.CollectionUtils;
 import com.aliucord.annotations.AliucordPlugin;
-import com.aliucord.entities.MessageEmbedBuilder;
 import com.aliucord.entities.Plugin;
-import com.aliucord.patcher.PinePatchFn;
+import com.aliucord.patcher.*;
 
 import com.aliucord.Logger;
 import com.aliucord.Utils;
-import com.aliucord.utils.ReflectUtils;
 
-import com.discord.utilities.mg_recycler.*;
-import com.discord.widgets.chat.input.sticker.StickerViewHolder;
-import com.discord.databinding.StickerPickerStickerItemBinding;
+import com.aliucord.utils.ReflectUtils;
+import com.discord.widgets.chat.input.WidgetChatInputAttachments;
+import com.discord.widgets.chat.input.WidgetChatInputAttachments$createAndConfigureExpressionFragment$stickerPickerListener$1;
+import com.discord.widgets.chat.input.sticker.*;
 import com.discord.utilities.stickers.StickerUtils;
-import com.discord.widgets.chat.input.sticker.StickerItem;
-import com.discord.api.sticker.BaseSticker;
 import com.discord.utilities.rest.RestAPI;
 //import com.discord.restapi.*;
 import com.discord.restapi.RestAPIParams;
@@ -29,20 +25,17 @@ import com.discord.stores.StoreStream;
 //import org.json.JSONObject;
 //import com.discord.utilities.analytics.AnalyticSuperProperties;
 //import com.aliucord.Http;
-import com.aliucord.utils.RxUtils;
 
 // This class is never used so your IDE will likely complain. Let's make it shut up!
 @SuppressWarnings("unused")
 @AliucordPlugin
 public class FakeStickers extends Plugin {
-    
+
     public FakeStickers() {}
 
 	@Override
 	// Called when your plugin is started. This is the place to register command, add patches, etc
-	public void start(Context context) {
-	
-	
+	public void start(Context context) throws Throwable {
 		// add the patch
 		
 		/*patcher.patch("WidgetChatInputAttachments$createAndConfigureExpressionFragment$emojiPickerListener$1",
@@ -50,88 +43,49 @@ public class FakeStickers extends Plugin {
 			new Class<?>[] { WidgetChatInputAttachments.class }, new PinePatchFn( callFrame -> {
 			
 		}))*/
-		
-		patcher.patch(StickerViewHolder.class, "configureSticker", new Class<?>[] {MGRecyclerDataPayload.class }, new PinePatchFn(callFrame -> {
-			
+
+		// Do not mark stickers as unsendable (grey overlay)
+		patcher.patch(StickerItem.class.getDeclaredMethod("getSendability"), InsteadHook.returnConstant(StickerUtils.StickerSendability.SENDABLE));
+
+		patcher.patch(WidgetStickerPicker.class.getDeclaredMethod("onStickerItemSelected", StickerItem.class), new PreHook(param -> {
 			try {
-				//The stickerItem casting and null check is from decompiled code, I'm not sure if it's necessary but I guess if the app does it I should do it too
-				MGRecyclerDataPayload mGRecyclerDataPayload = (MGRecyclerDataPayload)callFrame.args[0];
-				StickerItem stickerItem = (StickerItem) (!(mGRecyclerDataPayload instanceof StickerItem) ? null : mGRecyclerDataPayload);
-				//The important thing here is the third condition, which is to override the function if it's not sendable normally
-				if (stickerItem != null && stickerItem.getSticker() != null && stickerItem.getSendability() != StickerUtils.StickerSendability.SENDABLE) {
-					//Need reflection since binding is private
-					StickerPickerStickerItemBinding binding = (StickerPickerStickerItemBinding)ReflectUtils.getField(callFrame.thisObject,"binding");
-					BaseSticker baseSticker = (BaseSticker)binding.b.j;
-					
-					binding.b.setOnClickListener(view -> {
-						//Utils.showToast("https://media.discordapp.net/stickers/"+baseSticker.d()+baseSticker.b()+"?size=160",false);
-						long id = StoreStream.getChannelsSelected().getId();
-						if (id < 1)
-						{
-							Utils.showToast("You are not in a valid channel.");
-						}
-						else
-						{
-							RestAPIParams.Message message = new RestAPIParams.Message(
-								//"https://media.discordapp.net/stickers/"+baseSticker.d()+baseSticker.b()+"?size=160",
-								"https://cdn.discordapp.com/stickers/"+baseSticker.d()+baseSticker.b(),
-								Long.toString(NonceGenerator.computeNonce(ClockFactory.get())),
-								null,
-								null,
-								Collections.emptyList(),
-								null,
-								new RestAPIParams.Message.AllowedMentions(
-										Collections.emptyList(),
-										Collections.emptyList(),
-										Collections.emptyList(),
-										false
-								)
-							);
-							//new Logger("FakeStickers").debug(Long.toString(id));
-							new Logger("FakeStickers").debug(message.toString());
-							Utils.threadPool.execute(() -> {
-								//Subscriptions in Java, because you can't do msg.subscribe() like in Kotlin
-								RxUtils.subscribe(RestAPI.getApi().sendMessage(id, message),RxUtils.createActionSubscriber(zz -> {}));
-							});
-							
-							// try {
-							// 	JSONObject json = new JSONObject()
-							// 	.put("content","https://media.discordapp.net/stickers/"+baseSticker.d()+baseSticker.b()+"?size=160")
-							// 	.put("nonce",Long.toString(NonceGenerator.computeNonce(ClockFactory.get())))
-							// 	.put("tts",false);
-								
-							// 	Http.Request req = new Http.Request("https://discord.com/api/v9/channels/"+Long.toString(id)+"/messages", "POST")
-							// 	.setHeader("Authorization", (String)ReflectUtils.getField(StoreStream.getAuthentication(), "authToken"))
-							// 	.setHeader("User-Agent", RestAPI.AppHeadersProvider.INSTANCE.getUserAgent())
-							// 	.setHeader("X-Super-Properties", AnalyticSuperProperties.INSTANCE.getSuperPropertiesStringBase64())
-							// 	.setHeader("Accept", "*/*");
-								
-							// 	req.executeWithJson(json.toString());
-							// }
-							// catch (Exception e) {
-				  			// 	e.printStackTrace();
-							// 	Utils.showToast("Oops", false);
-							// }
-						}
-						
-					});
-					
-					//new Logger("FakeStickers").debug("https://media.discordapp.net/stickers/"+baseSticker.d()+baseSticker.b()+"?size=160");
-					
-					/*String str = baseSticker.d() + baseSticker.b();
-					File file2 = new File(file, str);
-					if (!file2.exists()) {
-						return DownloadUtils.downloadFile(context, getCDNAssetUrl$default(this, baseSticker, null, false, 6, null), str, file);
-					}*/
-					
-				}
-			} catch (Exception e) {
-  				e.printStackTrace();
-				Utils.showToast("Oops", false);
+				// getSendability is patched above to always return SENDABLE so get the real value via reflect
+				if (ReflectUtils.getField(param.args[0], "sendability") == StickerUtils.StickerSendability.SENDABLE) return;
+
+				var sticker = ((StickerItem) param.args[0]).getSticker();
+
+				RestAPIParams.Message message = new RestAPIParams.Message(
+					"https://cdn.discordapp.com/stickers/"+sticker.d()+sticker.b(),
+					Long.toString(NonceGenerator.computeNonce(ClockFactory.get())),
+					null,
+					null,
+					Collections.emptyList(),
+					null,
+					new RestAPIParams.Message.AllowedMentions(
+							Collections.emptyList(),
+							Collections.emptyList(),
+							Collections.emptyList(),
+							false
+					)
+				);
+				new Logger("FakeStickers").debug(message.toString());
+				Utils.threadPool.execute(() -> {
+					//Subscriptions in Java, because you can't do msg.subscribe() like in Kotlin
+					RxUtils.subscribe(
+							RestAPI.getApi().sendMessage(StoreStream.getChannelsSelected().getId(), message),
+							RxUtils.createActionSubscriber(zz -> {})
+					);
+				});
+
+				// Skip original method
+				param.setResult(null);
+
+				// Dismiss sticker picker
+				var stickerListener = (WidgetChatInputAttachments$createAndConfigureExpressionFragment$stickerPickerListener$1) // What a classname jeez
+						ReflectUtils.getField(param.thisObject, "stickerPickerListener");
+				WidgetChatInputAttachments.access$getFlexInputFragment$p(stickerListener.this$0).r.hideExpressionTray();
+			} catch (Throwable ignored) {
 			}
-			
-			//shareButton.setVisibility(View.GONE);
-			
 		}));
 	}
 
