@@ -44,7 +44,7 @@ import android.graphics.Color;
 // This class is never used so your IDE will likely complain. Let's make it shut up!
 @SuppressWarnings("unused")
 @AliucordPlugin
-public class MyFirstPatch extends Plugin {
+public class CopyInsteadOfShareImages extends Plugin {
 
 	public static class PluginSettings extends BottomSheet {
         private final SettingsAPI settings;
@@ -69,7 +69,7 @@ public class MyFirstPatch extends Plugin {
         }
     }
     
-    public MyFirstPatch() {
+    public CopyInsteadOfShareImages() {
         settingsTab = new SettingsTab(PluginSettings.class, SettingsTab.Type.BOTTOM_SHEET).withArgs(settings);
     }
 
