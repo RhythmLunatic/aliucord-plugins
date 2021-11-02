@@ -151,15 +151,14 @@ public class EmbedTestFix extends Plugin {
 			e.printStackTrace();
 		}
 		
-		//settings.getBool("VideoEmbeds", false)
-		if (false)
+		if (settings.getBool("VideoEmbeds", false))
 		{
 			try {
 				patcher.patch(WidgetChatListAdapterItemMessage.class.getDeclaredMethod("configureItemTag", Message.class),
 					new Hook((cf)->{
 						var msg =(Message) cf.args[0];
 						var embeds = msg.getEmbeds();
-						if (embeds.size() < 1)
+						if (embeds.size() != 1)
 							return;
 						MessageEmbedWrapper twEmbed = new MessageEmbedWrapper(embeds.get(0));
 						VideoWrapper v = twEmbed.getVideo();
