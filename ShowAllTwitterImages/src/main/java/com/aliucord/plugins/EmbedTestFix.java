@@ -151,8 +151,8 @@ public class EmbedTestFix extends Plugin {
 			e.printStackTrace();
 		}
 		
-		//
-		if (settings.getBool("VideoEmbeds", false))
+		//settings.getBool("VideoEmbeds", false)
+		if (false)
 		{
 			try {
 				patcher.patch(WidgetChatListAdapterItemMessage.class.getDeclaredMethod("configureItemTag", Message.class),
