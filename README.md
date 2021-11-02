@@ -10,6 +10,8 @@ Shows the remaining twitter images if someone posts a twitter link with more tha
 
 Or in more technical terms, hooks the method that displays embeds and adds any remaining hidden embeds.
 
+Now supports displaying twitter videos, although the name hasn't been changed :V
+
 ## [FakeStickers](https://github.com/RhythmLunatic/aliucord-plugins/raw/builds/FakeStickers.zip)
 Posts a sticker as an image if the sticker is unavailable normally. Does not work for lottie stickers, to see animated stickers you will need the [AnimateApngs](https://github.com/Vendicated/AliucordPlugins/blob/builds/AnimateApngs.zip) plugin.
 
