@@ -1,4 +1,4 @@
-version = "1.0.1"
+version = "1.0.2"
 description = "If any (usually Twitter) embed has more than one image, shows all of them. If a Twitter embed has a video, it will also show it."
 
 aliucord {
