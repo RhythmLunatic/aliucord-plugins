@@ -24,15 +24,77 @@ import com.discord.widgets.chat.list.entries.ChatListEntry;
 import com.discord.widgets.chat.list.entries.MessageEntry;
 import com.discord.widgets.chat.list.entries.EmbedEntry;
 
+
+import android.view.View;
+import com.lytefast.flexinput.R;
+import com.aliucord.patcher.Hook;
+import com.discord.stores.StoreStream;
+import android.widget.TextView;
+import androidx.core.widget.NestedScrollView;
+import com.discord.widgets.channels.list.WidgetChannelsListItemChannelActions;
+import com.discord.widgets.chat.list.actions.WidgetChatListActions;
+import com.discord.widgets.chat.list.adapter.WidgetChatListAdapterItemMessage;
+import android.widget.LinearLayout;
+import android.graphics.drawable.Drawable;
+import androidx.core.content.ContextCompat;
+
+import com.aliucord.Http;
+import com.aliucord.Utils;
+import com.aliucord.wrappers.embeds.MessageEmbedWrapper;
+import com.aliucord.wrappers.embeds.VideoWrapper;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+//Needed for settings page
+import com.discord.views.CheckedSetting;
+import com.aliucord.api.SettingsAPI;
+import com.aliucord.widgets.BottomSheet;
+import android.os.Bundle;
+
+
 // This class is never used so your IDE will likely complain. Let's make it shut up!
 @SuppressWarnings("unused")
 @AliucordPlugin
 public class EmbedTestFix extends Plugin {
+
+
+	public static class PluginSettings extends BottomSheet {
+        private final SettingsAPI settings;
+
+        public PluginSettings(SettingsAPI settings) { this.settings = settings; }
+
+        public void onViewCreated(View view, Bundle bundle) {
+            super.onViewCreated(view, bundle);
+
+			//
+            addView(createCheckedSetting(view.getContext(), "Enable video embeds (Beta! Might lag the app!)", "VideoEmbeds", false));
+        }
+
+        private CheckedSetting createCheckedSetting(Context ctx, String title, String setting, boolean checkedByDefault) {
+        
+        	//fun createCheckedSetting(context: Context, type: CheckedSetting.ViewType, text: CharSequence?, subtext: CharSequence?)
+            CheckedSetting checkedSetting = Utils.createCheckedSetting(ctx, CheckedSetting.ViewType.SWITCH, title, null);
+
+            checkedSetting.setChecked(settings.getBool(setting, checkedByDefault));
+            checkedSetting.setOnCheckedListener( check -> {
+                settings.setBool(setting, check);
+            });
+
+            return checkedSetting;
+        }
+    }
+    
+    public EmbedTestFix() {
+        settingsTab = new SettingsTab(PluginSettings.class, SettingsTab.Type.BOTTOM_SHEET).withArgs(settings);
+    }
+
     @Override
     // Called when your plugin is started. This is the place to register command, add patches, etc
     public void start(Context context) {
 
-    	//Logger logger = new Logger("TwitterShowAllImages");
+		int viewID= View.generateViewId();
+		Drawable lockIcon = ContextCompat.getDrawable(context, R.d.ic_channel_text_locked).mutate();
+    	Logger logger = new Logger("ShowAllTwitterImages");
 		try {
 			patcher.patch(
 				ChatListEntry.Companion.class.getDeclaredMethod("createEmbedEntries",
@@ -88,13 +150,92 @@ public class EmbedTestFix extends Plugin {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		//
+		if (settings.getBool("VideoEmbeds", false))
+		{
+			try {
+				patcher.patch(WidgetChatListAdapterItemMessage.class.getDeclaredMethod("configureItemTag", Message.class),
+					new Hook((cf)->{
+						var msg =(Message) cf.args[0];
+						var embeds = msg.getEmbeds();
+						if (embeds.size() < 1)
+							return;
+						MessageEmbedWrapper twEmbed = new MessageEmbedWrapper(embeds.get(0));
+						VideoWrapper v = twEmbed.getVideo();
+						
+						
+						if (v!=null && v.getUrl().startsWith("https://twitter.com/i/videos"))
+						{
+							String[] newURL = twEmbed.getUrl().split("\\://",2);
+							logger.debug(newURL[1]);
+							new Thread(()->{
+								
+								try {
+									Http.Request req = new Http.Request("https://fx"+newURL[1], "GET")
+									.setHeader("User-Agent", "Mozilla/5.0 (compatible; Discordbot/2.0; +https://discordapp.com)")
+									.setHeader("Accept", "*/*");
+									Http.Response resp = req.execute();
+									final String txt = resp.text();
+									
+									MessageEmbedBuilder embed = new MessageEmbedBuilder(EmbedType.VIDEO);
+									
+									final Pattern pattern = Pattern.compile("<meta (?:property=\\\"og:video\\\" *content=\\\"(.+?)\\\")");
+									Matcher matcher = pattern.matcher(txt);
+									
+									if (matcher.find()) {
+										logger.debug("Video: "+matcher.group(1));
+										embed.setVideo(matcher.group(1));
+									}
+									else
+									{
+										Utils.showToast("No regex match!!");
+										logger.debug(txt);
+										//logger.debug("a");
+									}
+									
+									final Pattern pattern2 = Pattern.compile("<meta (?:property=\\\"og:image\\\" *content=\\\"(.+?)\\\")");
+									matcher = pattern2.matcher(txt);
+									
+									if (matcher.find()) {
+										logger.debug("Thumb: "+matcher.group(1));
+										embed.setThumbnail(matcher.group(1));
+									}
+									else
+									{
+										Utils.showToast("No regex match!!");
+										logger.debug(txt);
+										//logger.debug("a");
+									}
+									
+									msg.getEmbeds().add(embed.build());
+StoreStream.getMessages().handleMessageUpdate(msg.synthesizeApiMessage());
+
+									
+								}
+								catch (Exception e) {
+									Utils.showToast("Failed to fix twitter video embed, maybe fxtwitter is down?");
+									e.printStackTrace();
+								}
+							}).start();
+						}
+						
+					})
+				);
+			}
+			catch (Exception e) {
+				//Utils.showToast("Something wrong with video embeds feature...");
+				e.printStackTrace();
+			}
+		}
     }
+
 
     @Override
     // Called when your plugin is stopped
     public void stop(Context context) {
-        // Remove all patches
-        patcher.unpatchAll();
+	// Remove all patches
+	patcher.unpatchAll();
     }
 }
 

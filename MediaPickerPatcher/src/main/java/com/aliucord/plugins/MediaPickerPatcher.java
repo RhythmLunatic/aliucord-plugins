@@ -93,7 +93,7 @@ public class MediaPickerPatcher extends Plugin {
 					@Override
 					public void onClick (View v) {
 						Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-						if (settings.getBool("MMP_AllowAllFiles", true))
+						if (settings.getBool("MMP_AllowAllFiles", false))
 							intent.setType("*/*");
 						else
 						{
