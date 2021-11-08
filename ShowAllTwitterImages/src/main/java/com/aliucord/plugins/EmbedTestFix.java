@@ -93,8 +93,6 @@ public class EmbedTestFix extends Plugin {
     // Called when your plugin is started. This is the place to register command, add patches, etc
     public void start(Context context) {
 
-		int viewID= View.generateViewId();
-		Drawable lockIcon = ContextCompat.getDrawable(context, R.d.ic_channel_text_locked).mutate();
     	Logger logger = new Logger("ShowAllTwitterImages");
 		try {
 			patcher.patch(
