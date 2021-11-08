@@ -25,6 +25,7 @@ import com.discord.widgets.chat.list.entries.MessageEntry;
 import com.discord.widgets.chat.list.entries.EmbedEntry;
 
 
+//TODO: Clean this up
 import android.view.View;
 import com.lytefast.flexinput.R;
 import com.aliucord.patcher.Hook;

@@ -97,7 +97,7 @@ public class CopyInsteadOfShareImages extends Plugin {
 		var methodArguments = new Class<?>[] { };
 		
 		//Grab icon
-		Drawable icon = ContextCompat.getDrawable(context,R.d.ic_link_white_24dp).mutate();
+		Drawable icon = ContextCompat.getDrawable(context,R.e.ic_link_white_24dp).mutate();
 		
 		final int shareButtonId = Utils.getResId("menu_media_share","id");
 
