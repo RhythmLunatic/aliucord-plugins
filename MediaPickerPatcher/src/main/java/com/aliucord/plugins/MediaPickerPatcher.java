@@ -80,7 +80,7 @@ public class MediaPickerPatcher extends Plugin {
 
 			try {
 				var pickerObj = (c.b.a.a.a)callFrame.thisObject;
-				var pickerButton = (ImageView)pickerObj.m;
+				var pickerButton = (ImageView)pickerObj.n;
 				
 				//pickerButton.setVisibility(View.GONE);
 				
@@ -126,7 +126,7 @@ public class MediaPickerPatcher extends Plugin {
 			//logger.debug("State: "+String.valueOf(fragment.getShowsDialog()));
 			
 			//See "notes.txt" for more information.
-			c.b.a.a.a fragment = (c.b.a.a.a)((FlexInputFragment$b)callFrame.thisObject).i;
+			c.b.a.a.a fragment = (c.b.a.a.a)((FlexInputFragment$b)callFrame.thisObject).j;
 			
 			if (fragment != null && fragment.isAdded() && !fragment.isRemoving() && !fragment.isDetached()) {
 				try {

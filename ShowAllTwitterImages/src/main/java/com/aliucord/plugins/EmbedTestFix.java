@@ -68,7 +68,7 @@ public class EmbedTestFix extends Plugin {
             super.onViewCreated(view, bundle);
 
 			//
-            addView(createCheckedSetting(view.getContext(), "Enable video embeds (Beta! Might lag the app!)", "VideoEmbeds", false));
+            addView(createCheckedSetting(view.getContext(), "Enable video embeds (Kind of buggy, might show more than one embed)", "VideoEmbeds", true));
         }
 
         private CheckedSetting createCheckedSetting(Context ctx, String title, String setting, boolean checkedByDefault) {
@@ -150,7 +150,7 @@ public class EmbedTestFix extends Plugin {
 			e.printStackTrace();
 		}
 		
-		if (settings.getBool("VideoEmbeds", false))
+		if (settings.getBool("VideoEmbeds", true))
 		{
 			try {
 				patcher.patch(WidgetChatListAdapterItemMessage.class.getDeclaredMethod("configureItemTag", Message.class),
@@ -187,7 +187,7 @@ public class EmbedTestFix extends Plugin {
 									}
 									else
 									{
-										Utils.showToast("No regex match!!");
+										Utils.showToast("ShowAllTwitterImages: No regex match for video!!");
 										logger.debug(txt);
 										//logger.debug("a");
 									}
@@ -201,7 +201,7 @@ public class EmbedTestFix extends Plugin {
 									}
 									else
 									{
-										Utils.showToast("No regex match!!");
+										Utils.showToast("ShowAllTwitterImages: No regex match for thumbnail!!");
 										logger.debug(txt);
 										//logger.debug("a");
 									}

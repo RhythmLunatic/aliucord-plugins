@@ -14,4 +14,7 @@ project(":ShowAllTwitterImages").projectDir = File("./ShowAllTwitterImages")
 include(":FakeStickers")
 project(":FakeStickers").projectDir = File("./FakeStickers")
 
+include(":TimeZone")
+project(":TimeZone").projectDir = File("./TimeZone")
+
 rootProject.name = "AliucordPlugins"
