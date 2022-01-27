@@ -46,7 +46,7 @@ public class AttachmentKeyboardFix extends Plugin {
 		patcher.patch(FlexInputFragment$b.class,"run",new Class<?>[]{}, new PineInsteadFn(callFrame->{
 			//logger.debug("b.run() fired");
 			//logger.debug("State: "+String.valueOf(fragment.getShowsDialog()));
-			c.b.a.a.a fragment = (c.b.a.a.a)((FlexInputFragment$b)callFrame.thisObject).j;
+			b.b.a.a.a fragment = (b.b.a.a.a)((FlexInputFragment$b)callFrame.thisObject).j;
 			
 			if (fragment != null && fragment.isAdded() && !fragment.isRemoving() && !fragment.isDetached()) {
 				try {

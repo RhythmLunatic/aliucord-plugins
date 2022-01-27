@@ -75,17 +75,17 @@ public class MediaPickerPatcher extends Plugin {
 	public void start(Context context) {
 		Logger logger = new Logger("MediaPickerPatcher");
 
-		patcher.patch(c.b.a.a.a.class, "onCreateView", new Class<?>[]{LayoutInflater.class,ViewGroup.class,android.os.Bundle.class}, new PinePatchFn(callFrame -> {
+		patcher.patch(b.b.a.a.a.class, "onCreateView", new Class<?>[]{LayoutInflater.class,ViewGroup.class,android.os.Bundle.class}, new PinePatchFn(callFrame -> {
 			
 
 			try {
-				var pickerObj = (c.b.a.a.a)callFrame.thisObject;
+				var pickerObj = (b.b.a.a.a)callFrame.thisObject;
 				var pickerButton = (ImageView)pickerObj.n;
 				
 				//pickerButton.setVisibility(View.GONE);
 				
 				pickerButton.setOnLongClickListener(view -> {
-					new c.b.a.a.a$a(1,pickerObj).onClick(view);
+					new b.b.a.a.a$a(1,pickerObj).onClick(view);
 					return true;
 				});
 				
@@ -126,11 +126,11 @@ public class MediaPickerPatcher extends Plugin {
 			//logger.debug("State: "+String.valueOf(fragment.getShowsDialog()));
 			
 			//See "notes.txt" for more information.
-			c.b.a.a.a fragment = (c.b.a.a.a)((FlexInputFragment$b)callFrame.thisObject).j;
+			b.b.a.a.a fragment = (b.b.a.a.a)((FlexInputFragment$b)callFrame.thisObject).j;
 			
 			if (fragment != null && fragment.isAdded() && !fragment.isRemoving() && !fragment.isDetached()) {
 				try {
-					fragment.h(true);
+					fragment.h(true); //obfuscated .dismiss() function
 				} catch (IllegalStateException e) {
 					logger.warn("could not dismiss add content dialog");
 				}
