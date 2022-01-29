@@ -100,8 +100,8 @@ public class MediaPickerPatcher extends Plugin {
 							intent.setType("image/* video/*");
 							intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[] {"image/*", "video/*"});
 						}
-						//intent.addCategory("android.intent.category.OPENABLE");
-						//intent.putExtra("android.intent.extra.ALLOW_MULTIPLE", true);
+						intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+						
 						try {
 							pickerObj.startActivityForResult(intent, 5968);
 						} catch (ActivityNotFoundException unused) {
