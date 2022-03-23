@@ -6,8 +6,8 @@ import com.aliucord.CollectionUtils;
 import com.aliucord.annotations.AliucordPlugin;
 //import com.aliucord.entities.MessageEmbedBuilder;
 import com.aliucord.entities.Plugin;
-import com.aliucord.patcher.PinePatchFn;
-import com.aliucord.patcher.PineInsteadFn;
+import com.aliucord.patcher.Hook;
+import com.aliucord.patcher.InsteadHook;
 import com.aliucord.Logger;
 import com.aliucord.Utils;
 import android.widget.Toast;
@@ -75,7 +75,7 @@ public class MediaPickerPatcher extends Plugin {
 	public void start(Context context) {
 		Logger logger = new Logger("MediaPickerPatcher");
 
-		patcher.patch(b.b.a.a.a.class, "onCreateView", new Class<?>[]{LayoutInflater.class,ViewGroup.class,android.os.Bundle.class}, new PinePatchFn(callFrame -> {
+		patcher.patch(b.b.a.a.a.class, "onCreateView", new Class<?>[]{LayoutInflater.class,ViewGroup.class,android.os.Bundle.class}, new Hook(callFrame -> {
 			
 
 			try {
@@ -121,7 +121,7 @@ public class MediaPickerPatcher extends Plugin {
 		}));
 
 
-		patcher.patch(FlexInputFragment$b.class,"run",new Class<?>[]{}, new PineInsteadFn(callFrame->{
+		patcher.patch(FlexInputFragment$b.class,"run",new Class<?>[]{}, new InsteadHook(callFrame->{
 			//logger.debug("b.run() fired");
 			//logger.debug("State: "+String.valueOf(fragment.getShowsDialog()));
 			

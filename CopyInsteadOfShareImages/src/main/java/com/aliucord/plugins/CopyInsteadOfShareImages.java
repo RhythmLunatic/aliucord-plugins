@@ -6,7 +6,7 @@ import com.aliucord.CollectionUtils;
 import com.aliucord.annotations.AliucordPlugin;
 import com.aliucord.entities.MessageEmbedBuilder;
 import com.aliucord.entities.Plugin;
-import com.aliucord.patcher.PinePatchFn;
+import com.aliucord.patcher.Hook;
 
 //Needed for settings page
 import com.discord.views.CheckedSetting;
@@ -102,7 +102,7 @@ public class CopyInsteadOfShareImages extends Plugin {
 		final int shareButtonId = Utils.getResId("menu_media_share","id");
 
 		// add the patch
-		patcher.patch(WidgetMedia.class, methodName, methodArguments, new PinePatchFn(callFrame -> {
+		patcher.patch(WidgetMedia.class, methodName, methodArguments, new Hook(callFrame -> {
 			var binding = WidgetMedia.access$getBinding$p((WidgetMedia) callFrame.thisObject);
 			var root = binding.getRoot();
 			var shareButton = root.findViewById(shareButtonId);

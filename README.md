@@ -42,6 +42,6 @@ Please file an issue on the github repo if something is not working correctly.
 
 # Donate
 
-Like the plugins? Support me by donating.
+Like the plugins? Support me by donating. Donating means I can afford a better laptop and I don't have to write plugins in gedit.
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/D1D7Y21A)

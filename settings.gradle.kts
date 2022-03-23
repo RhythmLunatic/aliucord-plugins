@@ -14,6 +14,9 @@ project(":ShowAllTwitterImages").projectDir = File("./ShowAllTwitterImages")
 include(":FakeStickers")
 project(":FakeStickers").projectDir = File("./FakeStickers")
 
+include(":TabletMenuPullupFix")
+project(":TabletMenuPullupFix").projectDir = File("./TabletMenuPullupFix")
+
 include(":TimeZone")
 project(":TimeZone").projectDir = File("./TimeZone")
 

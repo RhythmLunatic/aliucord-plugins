@@ -6,8 +6,8 @@ import com.aliucord.CollectionUtils;
 import com.aliucord.annotations.AliucordPlugin;
 import com.aliucord.entities.MessageEmbedBuilder;
 import com.aliucord.entities.Plugin;
-import com.aliucord.patcher.PinePatchFn;
-import com.aliucord.patcher.PineInsteadFn;
+import com.aliucord.patcher.Hook;
+import com.aliucord.patcher.InsteadHook;
 import com.aliucord.wrappers.embeds.MessageEmbedWrapper;
 import com.aliucord.Logger;
 import com.aliucord.utils.ReflectUtils;
@@ -99,7 +99,7 @@ public class EmbedTestFix extends Plugin {
 				ChatListEntry.Companion.class.getDeclaredMethod("createEmbedEntries",
 					//Message message, StoreMessageState.State state, boolean isBlockedExpanded, boolean allowAnimatedEmojis, boolean autoPlayGifs, boolean dontDisplayAnyEmbeds, long guildID, boolean isThreadStarter
 					Message.class, StoreMessageState.State.class, boolean.class, boolean.class, boolean.class, boolean.class, long.class, boolean.class),
-				new PinePatchFn(callFrame->{
+				new Hook(callFrame->{
 					Message message = (Message)callFrame.args[0];
 					long guildID = (long)callFrame.args[6];
 
