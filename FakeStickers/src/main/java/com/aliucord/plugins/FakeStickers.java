@@ -38,15 +38,11 @@ public class FakeStickers extends Plugin {
 	public void start(Context context) throws Throwable {
 		// add the patch
 		
-		/*patcher.patch("WidgetChatInputAttachments$createAndConfigureExpressionFragment$emojiPickerListener$1",
-			"WidgetChatInputAttachments$createAndConfigureExpressionFragment$emojiPickerListener$1",
-			new Class<?>[] { WidgetChatInputAttachments.class }, new PinePatchFn( callFrame -> {
-			
-		}))*/
 
 		// Do not mark stickers as unsendable (grey overlay)
 		patcher.patch(StickerItem.class.getDeclaredMethod("getSendability"), InsteadHook.returnConstant(StickerUtils.StickerSendability.SENDABLE));
 
+		//Patch onClick to send sticker
 		patcher.patch(WidgetStickerPicker.class.getDeclaredMethod("onStickerItemSelected", StickerItem.class), new PreHook(param -> {
 			try {
 				// getSendability is patched above to always return SENDABLE so get the real value via reflect

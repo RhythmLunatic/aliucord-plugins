@@ -6,31 +6,10 @@ import com.aliucord.CollectionUtils;
 import com.aliucord.annotations.AliucordPlugin;
 //import com.aliucord.entities.MessageEmbedBuilder;
 import com.aliucord.entities.Plugin;
-//import com.aliucord.patcher.PinePatchFn;
-import com.aliucord.patcher.PineInsteadFn;
+import com.aliucord.patcher.InsteadHook;
 import com.aliucord.Logger;
 import com.aliucord.Utils;
-//import android.widget.Toast;
-//import android.provider.MediaStore;
-//import android.content.*;
-//import android.view.LayoutInflater;
-//import com.discord.widgets.chat.input.*;
-//import java.util.List;
 
-//import android.view.View;
-//import android.view.ViewGroup;
-//import androidx.viewbinding.ViewBinding;
-//import android.widget.ImageView;
-//import java.lang.reflect.Field;
-
-//Needed for settings page
-//import com.discord.views.CheckedSetting;
-//import com.aliucord.api.SettingsAPI;
-//import com.aliucord.widgets.BottomSheet;
-//import android.os.Bundle;
-
-//
-//import java.util.ArrayList;
 import com.lytefast.flexinput.fragment.*;
 import com.lytefast.flexinput.model.*;
 import androidx.fragment.app.DialogFragment;
@@ -43,7 +22,7 @@ public class AttachmentKeyboardFix extends Plugin {
 	@Override
 	// Called when your plugin is started. This is the place to register command, add patches, etc
 	public void start(Context context) {
-		patcher.patch(FlexInputFragment$b.class,"run",new Class<?>[]{}, new PineInsteadFn(callFrame->{
+		patcher.patch(FlexInputFragment$b.class,"run",new Class<?>[]{}, new InsteadHook(callFrame->{
 			//logger.debug("b.run() fired");
 			//logger.debug("State: "+String.valueOf(fragment.getShowsDialog()));
 			b.b.a.a.a fragment = (b.b.a.a.a)((FlexInputFragment$b)callFrame.thisObject).j;
