@@ -11,3 +11,4 @@
 local.properties
 *.swp
 **/.idea
+THESE_DONT_WORK/*

@@ -36,7 +36,7 @@ subprojects {
     apply(plugin = "com.android.library")
     apply(plugin = "com.aliucord.gradle")
     // Remove if using Java
-    //apply(plugin = "kotlin-android")
+    apply(plugin = "kotlin-android")
 
     // Fill out with your info
     aliucord {

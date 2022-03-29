@@ -1,10 +1,8 @@
-package com.aliucord.plugins;
+package com.accelerator.plugins;
 
 import android.content.Context;
 
-import com.aliucord.CollectionUtils;
 import com.aliucord.annotations.AliucordPlugin;
-import com.aliucord.entities.MessageEmbedBuilder;
 import com.aliucord.entities.Plugin;
 import com.aliucord.patcher.Hook;
 
@@ -17,12 +15,11 @@ import android.os.Bundle;
 //import com.aliucord.wrappers.embeds.MessageEmbedWrapper;
 //import com.discord.widgets.chat.list.entries.ChatListEntry;
 //import com.discord.widgets.chat.list.entries.MessageEntry;
-import com.aliucord.Logger;
 import com.aliucord.Utils;
 //import com.aliucord.utils.ReflectUtils;
 import com.discord.widgets.media.WidgetMedia;
 import android.widget.Toast;
-import android.content.Intent;
+
 import com.discord.app.AppFragment;
 import android.view.View;
 import androidx.appcompat.view.menu.ActionMenuItemView;

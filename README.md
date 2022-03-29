@@ -31,6 +31,9 @@ Fixes a Discord bug where picking an attachment and typing something brings the 
 
 **This is only for people that don't want to install MediaPickerPatcher, as MediaPickerPatcher already comes with this fix.**
 
+## [NitroSpoofForNQN](https://github.com/RhythmLunatic/aliucord-plugins/raw/builds/NitroSpoofForNQN.zip)
+Allows posting nitro emotes if the server you want to post emotes from and the server you're posting to both have the NQN bot.
+
 # Special Thanks
 zt, Ven Halen, Not Wing, and everyone else who answered my questions when I know virtually nothing about Java/Android
 

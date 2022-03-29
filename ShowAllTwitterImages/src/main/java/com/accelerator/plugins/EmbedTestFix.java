@@ -1,47 +1,34 @@
-package com.aliucord.plugins;
+package com.accelerator.plugins;
 
 import android.content.Context;
 
-import com.aliucord.CollectionUtils;
 import com.aliucord.annotations.AliucordPlugin;
 import com.aliucord.entities.MessageEmbedBuilder;
 import com.aliucord.entities.Plugin;
 import com.aliucord.patcher.Hook;
-import com.aliucord.patcher.InsteadHook;
 import com.aliucord.wrappers.embeds.MessageEmbedWrapper;
 import com.aliucord.Logger;
 import com.aliucord.utils.ReflectUtils;
 
 import com.discord.api.message.embed.EmbedType;
 import com.discord.models.message.Message;
-import java.util.ArrayList;
+
 import java.util.List;
-import java.util.Objects;
 
 import com.discord.api.message.embed.MessageEmbed;
 import com.discord.stores.StoreMessageState;
 import com.discord.widgets.chat.list.entries.ChatListEntry;
-import com.discord.widgets.chat.list.entries.MessageEntry;
 import com.discord.widgets.chat.list.entries.EmbedEntry;
 
 
 //TODO: Clean this up
 import android.view.View;
-import com.lytefast.flexinput.R;
-import com.aliucord.patcher.Hook;
+
 import com.discord.stores.StoreStream;
-import android.widget.TextView;
-import androidx.core.widget.NestedScrollView;
-import com.discord.widgets.channels.list.WidgetChannelsListItemChannelActions;
-import com.discord.widgets.chat.list.actions.WidgetChatListActions;
 import com.discord.widgets.chat.list.adapter.WidgetChatListAdapterItemMessage;
-import android.widget.LinearLayout;
-import android.graphics.drawable.Drawable;
-import androidx.core.content.ContextCompat;
 
 import com.aliucord.Http;
 import com.aliucord.Utils;
-import com.aliucord.wrappers.embeds.MessageEmbedWrapper;
 import com.aliucord.wrappers.embeds.VideoWrapper;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

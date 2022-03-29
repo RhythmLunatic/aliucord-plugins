@@ -1,8 +1,8 @@
-package com.aliucord.plugins;
+package com.accelerator.plugins;
 
 import android.content.Context;
 
-import com.aliucord.CollectionUtils;
+import com.aliucord.PluginManager;
 import com.aliucord.annotations.AliucordPlugin;
 //import com.aliucord.entities.MessageEmbedBuilder;
 import com.aliucord.entities.Plugin;
@@ -14,14 +14,10 @@ import android.widget.Toast;
 import android.provider.MediaStore;
 import android.content.*;
 import android.view.LayoutInflater;
-import com.discord.widgets.chat.input.*;
-import java.util.List;
 
 import android.view.View;
 import android.view.ViewGroup;
-import androidx.viewbinding.ViewBinding;
 import android.widget.ImageView;
-import java.lang.reflect.Field;
 
 //Needed for settings page
 import com.discord.views.CheckedSetting;
@@ -30,10 +26,7 @@ import com.aliucord.widgets.BottomSheet;
 import android.os.Bundle;
 
 //
-import java.util.ArrayList;
 import com.lytefast.flexinput.fragment.*;
-import com.lytefast.flexinput.model.*;
-import androidx.fragment.app.DialogFragment;
 
 // This class is never used so your IDE will likely complain. Let's make it shut up!
 @SuppressWarnings("unused")
@@ -68,6 +61,10 @@ public class MediaPickerPatcher extends Plugin {
     
     public MediaPickerPatcher() {
         settingsTab = new SettingsTab(PluginSettings.class, SettingsTab.Type.BOTTOM_SHEET).withArgs(settings);
+        if (PluginManager.plugins.get("AttachmentKeyboardFix") != null && PluginManager.isPluginEnabled("AttachmentKeyboardFix"))
+        {
+        	Utils.showToast("Do not enable AttachmentKeyboardFix and MediaPickerPatcher at the same time, they do the same thing!!",true);
+        }
     }
 
 	@Override

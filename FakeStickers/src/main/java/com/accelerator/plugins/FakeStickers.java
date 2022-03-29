@@ -1,4 +1,4 @@
-package com.aliucord.plugins;
+package com.accelerator.plugins;
 
 import android.content.Context;
 
@@ -63,6 +63,7 @@ public class FakeStickers extends Plugin {
 							Collections.emptyList(),
 							false
 					),
+					null,
 					null
 				);
 				new Logger("FakeStickers").debug(message.toString());

@@ -1,18 +1,14 @@
-package com.aliucord.plugins;
+package com.accelerator.plugins;
 
 import android.content.Context;
 
-import com.aliucord.CollectionUtils;
 import com.aliucord.annotations.AliucordPlugin;
 //import com.aliucord.entities.MessageEmbedBuilder;
 import com.aliucord.entities.Plugin;
 import com.aliucord.patcher.InsteadHook;
 import com.aliucord.Logger;
-import com.aliucord.Utils;
 
 import com.lytefast.flexinput.fragment.*;
-import com.lytefast.flexinput.model.*;
-import androidx.fragment.app.DialogFragment;
 
 // This class is never used so your IDE will likely complain. Let's make it shut up!
 @SuppressWarnings("unused")
