@@ -34,6 +34,8 @@ Fixes a Discord bug where picking an attachment and typing something brings the 
 ## [NitroSpoofForNQN](https://github.com/RhythmLunatic/aliucord-plugins/raw/builds/NitroSpoofForNQN.zip)
 Allows posting nitro emotes if the server you want to post emotes from and the server you're posting to both have the NQN bot.
 
+Blatantly copied from [X1nto's NitroSpoof](https://github.com/X1nto/AliucordPlugins/blob/master/plugins/NitroSpoof/src/main/java/com/xinto/aliuplugins/NitroSpoof.kt)
+
 # Special Thanks
 zt, Ven Halen, Not Wing, and everyone else who answered my questions when I know virtually nothing about Java/Android
 

@@ -14,7 +14,7 @@ project(":ShowAllTwitterImages").projectDir = File("./ShowAllTwitterImages")
 include(":FakeStickers")
 project(":FakeStickers").projectDir = File("./FakeStickers")
 
-include(":NitroSpoofForNQN")
-project(":NitroSpoofForNQN").projectDir = File("./NitroSpoofForNQN")
+include(":NS4NQN")
+project(":NS4NQN").projectDir = File("./NitroSpoofForNQN")
 
 rootProject.name = "AliucordPlugins"

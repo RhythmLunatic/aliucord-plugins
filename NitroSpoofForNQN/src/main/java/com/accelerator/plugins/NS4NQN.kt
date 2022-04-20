@@ -11,7 +11,7 @@ import java.lang.reflect.Field
 
 @SuppressWarnings("unused")
 @AliucordPlugin
-class NitroSpoofForNQN : Plugin() {
+class NS4NQN : Plugin() {
 
     private val reflectionCache = HashMap<String, Field>()
 
