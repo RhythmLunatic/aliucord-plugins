@@ -5,7 +5,7 @@ Cool Aliucord plugins. Click the plugin name to download it.
 ## [Copy Instead Of Share Images](https://github.com/RhythmLunatic/aliucord-plugins/raw/builds/CopyInsteadOfShareImages.zip)
 Replaces the share button in the image/video preview with one that only copies the URL to the clipboard. Can also automatically replace media.discordapp with cdn.discordapp to fix videos.
 
-## [Show All Twitter Images](https://github.com/RhythmLunatic/aliucord-plugins/raw/builds/ShowAllTwitterImages.zip)
+## [Twitter Rebuild](https://github.com/RhythmLunatic/aliucord-plugins/raw/builds/TwitterRebuild.zip)
 Shows the remaining twitter images if someone posts a twitter link with more than one image.
 
 Or in more technical terms, hooks the method that displays embeds and adds any remaining hidden embeds.
