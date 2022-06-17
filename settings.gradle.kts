@@ -7,9 +7,8 @@ project(":MediaPickerPatcher").projectDir = File("./MediaPickerPatcher")
 include(":AttachmentKeyboardFix")
 project(":AttachmentKeyboardFix").projectDir = File("./AttachmentKeyboardFix")
 
-include(":ShowAllTwitterImages")
-project(":ShowAllTwitterImages").projectDir = File("./ShowAllTwitterImages")
-
+include(":TwitterRebuild")
+project(":TwitterRebuild").projectDir = File("./TwitterRebuild")
 
 include(":FakeStickers")
 project(":FakeStickers").projectDir = File("./FakeStickers")
