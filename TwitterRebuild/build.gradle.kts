@@ -19,4 +19,5 @@ aliucord {
             * Special thanks to HalalKing and mantikafasi for the code I kanged to add video support.
         """.trimIndent()
     )
+    author("Derlan", 821545900807028757L)
 }
