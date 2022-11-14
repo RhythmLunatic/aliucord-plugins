@@ -161,7 +161,7 @@ public class Main extends Plugin {
                                         try {
                                             //Note: p91878l7.beget.tech/api.php - https://gist.github.com/ServOKio/0c08858a7400b2d759fb3fa216926fc6
                                             //Why ? Directly twitter returned "Connection reset" #RussianSanctionsAgainstTwitter
-                                            String defUrl = "https://cdn.syndication.twimg.com/tweet?lang=en&id="+matcher.group(1);
+                                            String defUrl = "https://cdn.syndication.twimg.com/tweet-result?lang=en&id="+matcher.group(1);
                                             URL obj = new URL(settings.getBool("EnableProxy", false) ? addParameter(addParameter("http://p91878l7.beget.tech/api.php", "reg", "get_content"), "url", defUrl) : defUrl);
                                             HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
