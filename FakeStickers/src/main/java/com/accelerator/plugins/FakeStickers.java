@@ -51,7 +51,7 @@ public class FakeStickers extends Plugin {
 				var sticker = ((StickerItem) param.args[0]).getSticker();
 
 				RestAPIParams.Message message = new RestAPIParams.Message(
-					"https://cdn.discordapp.com/stickers/"+sticker.d()+sticker.b(),
+					"https://media.discordapp.net/stickers/"+sticker.d()+sticker.b()+"?size=160",
 					Long.toString(NonceGenerator.computeNonce(ClockFactory.get())),
 					null,
 					null,
