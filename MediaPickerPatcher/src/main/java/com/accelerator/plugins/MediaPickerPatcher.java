@@ -48,11 +48,6 @@ public class MediaPickerPatcher extends Plugin {
 				
 				//pickerButton.setVisibility(View.GONE);
 				
-				pickerButton.setOnLongClickListener(view -> {
-					new b.b.a.a.a$a(1,pickerObj).onClick(view);
-					return true;
-				});
-				
 				pickerButton.setOnClickListener( new View.OnClickListener() {
 					@Override
 					public void onClick (View v) {
