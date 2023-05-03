@@ -19,12 +19,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-//Needed for settings page
-import com.discord.views.CheckedSetting;
-import com.aliucord.api.SettingsAPI;
-import com.aliucord.widgets.BottomSheet;
-import android.os.Bundle;
-
 //
 import com.lytefast.flexinput.fragment.*;
 
@@ -32,35 +26,8 @@ import com.lytefast.flexinput.fragment.*;
 @SuppressWarnings("unused")
 @AliucordPlugin
 public class MediaPickerPatcher extends Plugin {
-
-	public static class PluginSettings extends BottomSheet {
-        private final SettingsAPI settings;
-
-        public PluginSettings(SettingsAPI settings) { this.settings = settings; }
-
-        public void onViewCreated(View view, Bundle bundle) {
-            super.onViewCreated(view, bundle);
-
-			//
-            addView(createCheckedSetting(view.getContext(), "Allow all file types", "MMP_AllowAllFiles", false));
-        }
-
-        private CheckedSetting createCheckedSetting(Context ctx, String title, String setting, boolean checkedByDefault) {
-        
-        	//fun createCheckedSetting(context: Context, type: CheckedSetting.ViewType, text: CharSequence?, subtext: CharSequence?)
-            CheckedSetting checkedSetting = Utils.createCheckedSetting(ctx, CheckedSetting.ViewType.SWITCH, title, null);
-
-            checkedSetting.setChecked(settings.getBool(setting, checkedByDefault));
-            checkedSetting.setOnCheckedListener( check -> {
-                settings.setBool(setting, check);
-            });
-
-            return checkedSetting;
-        }
-    }
     
     public MediaPickerPatcher() {
-        settingsTab = new SettingsTab(PluginSettings.class, SettingsTab.Type.BOTTOM_SHEET).withArgs(settings);
         if (PluginManager.plugins.get("AttachmentKeyboardFix") != null && PluginManager.isPluginEnabled("AttachmentKeyboardFix"))
         {
         	Utils.showToast("Do not enable AttachmentKeyboardFix and MediaPickerPatcher at the same time, they do the same thing!!",true);
@@ -89,16 +56,11 @@ public class MediaPickerPatcher extends Plugin {
 				pickerButton.setOnClickListener( new View.OnClickListener() {
 					@Override
 					public void onClick (View v) {
-						Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-						if (settings.getBool("MMP_AllowAllFiles", false))
-							intent.setType("*/*");
-						else
-						{
-							intent.setType("image/* video/*");
-							intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[] {"image/*", "video/*"});
-						}
+						Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+						intent.setType("*/*");
 						intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-						
+						intent = Intent.createChooser(intent, "Choose a file");
+
 						try {
 							pickerObj.startActivityForResult(intent, 5968);
 						} catch (ActivityNotFoundException unused) {
