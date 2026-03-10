@@ -14,7 +14,7 @@ buildscript {
     dependencies {
         classpath("com.android.tools.build:gradle:7.0.4")
         // Aliucord gradle plugin which makes everything work and builds plugins
-        classpath("com.aliucord:gradle:main-SNAPSHOT")
+        classpath("com.aliucord:gradle:bbcd8a8")
         // Kotlin support. Remove if you want to use Java
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.21")
     }
@@ -75,8 +75,8 @@ subprojects {
         val implementation by configurations
 
         // Stubs for all Discord classes
-        discord("com.discord:discord:aliucord-SNAPSHOT")
-        implementation("com.aliucord:Aliucord:main-SNAPSHOT")
+        discord("com.discord:discord:126021")
+        implementation("com.aliucord:Aliucord:2.1.1")
 
         implementation("androidx.appcompat:appcompat:1.4.0")
         implementation("com.google.android.material:material:1.4.0")
