@@ -116,7 +116,7 @@ public class CopyInsteadOfShareImages extends Plugin {
 				//Better one
 				String imageUri = ((AppFragment)callFrame.thisObject).getMostRecentIntent().getStringExtra("INTENT_MEDIA_URL");
 				if (settings.getBool("replaceMediaWithCDN", true))
-					imageUri = imageUri.replace("media.discordapp.net","cdn.discordapp.com");
+					imageUri = imageUri.replace("media.discordapp.net/attachments","cdn.discordapp.com/attachments");
 				
 				//Because I can't make a string final after it's already been created...
 				final String imageUriFinal = new String(imageUri);
