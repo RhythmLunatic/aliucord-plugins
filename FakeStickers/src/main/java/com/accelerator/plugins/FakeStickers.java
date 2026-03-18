@@ -10,16 +10,11 @@ import com.aliucord.Logger;
 import com.aliucord.Utils;
 
 import com.aliucord.utils.ReflectUtils;
-import com.discord.widgets.chat.input.WidgetChatInputAttachments;
-import com.discord.widgets.chat.input.WidgetChatInputAttachments$createAndConfigureExpressionFragment$stickerPickerListener$1;
 import com.discord.widgets.chat.input.sticker.*;
 import com.discord.utilities.stickers.StickerUtils;
 import com.discord.widgets.chat.MessageManager;
 import java.util.Collections;
 import com.discord.stores.StoreStream;
-//import org.json.JSONObject;
-//import com.discord.utilities.analytics.AnalyticSuperProperties;
-//import com.aliucord.Http;
 
 // This class is never used so your IDE will likely complain. Let's make it shut up!
 @SuppressWarnings("unused")
@@ -67,10 +62,8 @@ public class FakeStickers extends Plugin {
 				param.setResult(null);
 
 				// Dismiss sticker picker
-				var stickerListener = (WidgetChatInputAttachments$createAndConfigureExpressionFragment$stickerPickerListener$1) // What a classname jeez
-						ReflectUtils.getField(param.thisObject, "stickerPickerListener");
-				//.s here is FlexInputFragment's FlexInputViewModel property (obfuscated to s)
-				WidgetChatInputAttachments.access$getFlexInputFragment$p(stickerListener.this$0).s.hideExpressionTray();
+				var stickerListener = (StickerPickerListener) ReflectUtils.getField(param.thisObject, "stickerPickerListener");
+				stickerListener.onStickerPicked(sticker);
 			} catch (Throwable e) {
 				this.logger.error(e);
 			}
