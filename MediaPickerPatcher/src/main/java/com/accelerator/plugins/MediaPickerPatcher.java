@@ -66,6 +66,15 @@ public class MediaPickerPatcher extends Plugin {
         	Utils.showToast("Do not enable AttachmentKeyboardFix and MediaPickerPatcher at the same time, they do the same thing!!",true);
         }
     }
+	
+	private void launchPicker(b.b.a.a.a pickerObj, Intent intent) {
+		intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+		try {
+			pickerObj.startActivityForResult(intent, 5968);
+		} catch (ActivityNotFoundException unused) {
+			Toast.makeText(pickerObj.getContext(), "lmao", 0).show();
+		}
+	}
 
 	@Override
 	// Called when your plugin is started. This is the place to register command, add patches, etc
@@ -82,7 +91,10 @@ public class MediaPickerPatcher extends Plugin {
 				//pickerButton.setVisibility(View.GONE);
 				
 				pickerButton.setOnLongClickListener(view -> {
-					new b.b.a.a.a$a(1,pickerObj).onClick(view);
+					Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+					intent.addCategory(Intent.CATEGORY_OPENABLE);
+					intent.setType("*/*");
+					launchPicker(pickerObj, intent);
 					return true;
 				});
 				
@@ -97,13 +109,7 @@ public class MediaPickerPatcher extends Plugin {
 							intent.setType("image/* video/*");
 							intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[] {"image/*", "video/*"});
 						}
-						intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-						
-						try {
-							pickerObj.startActivityForResult(intent, 5968);
-						} catch (ActivityNotFoundException unused) {
-							Toast.makeText(pickerObj.getContext(), "lmao", 0).show();
-						}
+						launchPicker(pickerObj, intent);
 					}
 				});
 				logger.debug("Patched media picker button.");

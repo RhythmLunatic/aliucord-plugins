@@ -1,9 +1,11 @@
-version = "1.0.91"
+version = "1.1.0"
 description = "Replaces the document picker with one that opens the default gallery app. Can also long press the open file button for the original document picker."
 
 aliucord {
     changelog.set(
         """
+		    # 1.1.0
+            * Allow selecting a file picker inside the android file browser when holding the button
             # 1.0.91
             * Aliucord removed Pine hooks finally so I had to fix it
             # 1.0.9
