@@ -91,10 +91,15 @@ public class MediaPickerPatcher extends Plugin {
 				//pickerButton.setVisibility(View.GONE);
 				
 				pickerButton.setOnLongClickListener(view -> {
-					Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-					intent.addCategory(Intent.CATEGORY_OPENABLE);
-					intent.setType("*/*");
-					launchPicker(pickerObj, intent);
+					if (android.os.Build.VERSION.SDK_INT >= 30) {
+						Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+						intent.addCategory(Intent.CATEGORY_OPENABLE);
+						intent.setType("*/*");
+						launchPicker(pickerObj, intent);
+					} else
+					{
+						new b.b.a.a.a$a(1, pickerObj).onClick(view);
+					}
 					return true;
 				});
 				
