@@ -115,6 +115,11 @@ public class CopyInsteadOfShareImages extends Plugin {
 				
 				//Better one
 				String imageUri = ((AppFragment)callFrame.thisObject).getMostRecentIntent().getStringExtra("INTENT_MEDIA_URL");
+				
+				//Use INTENT_IMAGE_URL for Discord attachments urls to always get unexpired links.
+				if (imageUri.contains("cdn.discordapp.com/attachments")||imageUri.contains("media.discordapp.net/attachments"))
+					imageUri = ((AppFragment)callFrame.thisObject).getMostRecentIntent().getStringExtra("INTENT_IMAGE_URL");
+				
 				if (settings.getBool("replaceMediaWithCDN", true))
 					imageUri = imageUri.replace("media.discordapp.net/attachments","cdn.discordapp.com/attachments");
 				
