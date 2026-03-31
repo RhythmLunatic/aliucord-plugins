@@ -1,10 +1,14 @@
-version = "1.1.2"
+version = "1.1.3"
 description = "Posts a sticker as an image if the sticker is unavailable normally (Usually when you don't have Nitro). Lottie stickers are unsupported."
 
 aliucord {
     changelogMedia.set("https://cdn.discordapp.com/stickers/883809297216192573.png")
     changelog.set(
         """
+            # 1.1.3
+            * Allow replying
+            # 1.1.2
+            * Set sticker size to 160px
             # 1.1.1
             * Support Discord 105.12
             # 1.1.0
